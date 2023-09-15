@@ -1,0 +1,99 @@
+service: serverless-api
+frameworkVersion: '3'
+useDotenv: true
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  stage: ${opt:stage}
+  profile: ${opt:aws-profile}
+  deploymentBucket:
+    name: ${env:SERVERLESS_BUCKET_NAME}
+
+custom:
+  project: cms
+  serverless-offline:
+    useChildProcesses: true
+    noPrependStageInUrl: true
+    allowCache: false
+    watch:
+      - micro-services/main/src/**/*.ts
+      - micro-services/main/src/**/*.js
+  customDomain:
+    domainName: ${env:DOMAIN}
+    basePath: ''
+    stage: ${self:provider.stage}
+    createRoute53Record: true
+
+plugins:
+  - serverless-plugin-typescript
+  - serverless-offline
+  - serverless-domain-manager
+  - serverless-dotenv-plugin
+
+functions:
+  # ============================
+  # generatePreSignedUrl lambda
+  # ============================
+  generatePreSignedUrl:
+    handler: micro-services/presigned-urls/s3Upload.generatePreSignedUrl
+    environment:
+      JWT_SECRET: ${env:JWT_SECRET}
+      BUCKET_NAME: ${env:BUCKET_NAME}
+    events:
+      - http:
+          path: generatePreSignedUrl
+          method: post
+          cors: true
+
+  # =======================
+  # authorizer lambda
+  # =======================
+  authorizer:
+    handler: micro-services/authorizer/authorizer.handler
+    environment:
+      JWT_SECRET: ${env:JWT_SECRET}
+
+  # =======================
+  # API lambda
+  # =======================
+  api:
+    handler: micro-services/main/src/index.handler
+    role: ${ssm:${self:custom.project}-${opt:stage}-all-iam-role}
+    environment:
+      JWT_SECRET: ${env:JWT_SECRET}
+      ENVIRONMENT: ${opt:stage}
+      PROJECT_ENVIRONMENT: ${self:custom.project}-${opt:stage}
+    events:
+      - http:
+          method: ANY
+          path: /auth/
+          cors: true
+      - http:
+          method: ANY
+          path: /auth/{proxy+}
+          cors: true
+
+      - http:
+          method: ANY
+          path: /api/
+          cors: true
+          authorizer:
+            name: authorizer
+            resultTtlInSeconds: 0
+      - http:
+          method: ANY
+          path: /api/{proxy+}
+          cors: true
+          authorizer:
+            name: authorizer
+            resultTtlInSeconds: 0
+
+      - http:
+          method: ANY
+          path: /
+          cors: true
+      - http:
+          method: ANY
+          path: /{proxy+}
+          cors: true

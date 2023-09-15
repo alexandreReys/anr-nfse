@@ -1,0 +1,11 @@
+version: '3'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - .:/app
+      - ${USERPROFILE}/.ssh:/root/.ssh
+      - ${USERPROFILE}/.aws:/root/.aws
+    tty: true

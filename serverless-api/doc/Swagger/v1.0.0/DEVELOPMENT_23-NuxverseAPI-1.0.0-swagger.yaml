@@ -1,0 +1,1809 @@
+openapi: 3.0.0
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: Development API Nuxverse 
+    url: https://api.cms.dev.nuxverse.com
+  - description: AWS API Nuxverse 
+    url: https://gznuq2tp9d.execute-api.us-east-1.amazonaws.com/dev/
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/DEVELOPMENT_23/NuxverseAPI/1.0.0
+  - description: Sandbox API Nuxverse 
+    url: https://api.cms.sand.nuxverse.com
+  - description: Production API Nuxverse 
+    url: https://api.cms.nuxverse.com
+    
+info:
+  description: Nux API
+  version: "1.0.0"
+  title: Nux API
+  contact:
+    email: john-wick@gmail.com  
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+tags:
+  - name: S3
+    description: ..
+  - name: auth
+    description: .
+  - name: users
+    description: .
+  - name: events
+    description: .
+  - name: worlds
+    description: .
+
+paths:
+  /generatePreSignedUrl:
+    post:
+      security:
+        - BearerAuth: []
+      tags:
+        - S3
+      summary: Requires a pre-signed and authorized URL to upload assets directly to AWS S3
+      operationId: s3Url
+      description: |
+        Requires a pre-signed and authorized URL to upload assets directly to AWS S3
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetPresignedUrlBody'
+      responses:
+        '200':
+          description: sucess
+          content:
+            application/json:
+              examples:
+                PreSignedImage:
+                  $ref: '#/components/examples/PreSignedImage'
+                PreSignedVideo:
+                  $ref: '#/components/examples/PreSignedVideo'
+                PreSignedOthers:
+                  $ref: '#/components/examples/PreSignedOthers'
+        '400':
+          description: Bad Request
+
+  /auth/v1/login:
+    post:
+      tags:
+        - auth
+      summary: login to the system by email and password
+      operationId: loginV1
+      description: |
+        By passing in the appropriate options, you can login the system
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginBody'
+      responses:
+        '200':
+          description: sucess
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LoginResponse'
+        '400':
+          description: bad input parameter
+          
+  /auth/v1/social:
+    post:
+      tags:
+        - auth
+      summary: login to the system by email and wixId 
+      operationId: socialLoginV1
+      description: |
+        Passing the appropriate options, you can log in to the system by email and wixId. If the user has not been registered, he will be registered by email, wixId, firstName and LastName.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SocialLoginBody'
+      responses:
+        '200':
+          description: sucess
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '400':
+          description: bad input parameter
+          
+  /auth/v1/register:
+    post:
+      tags:
+        - auth
+      summary: Passing the appropriate options, you will be able to register in the system
+      operationId: registerV1
+      description: Passing the appropriate options, you will be able to register in the system
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterBody'
+      responses:
+        '200':
+          description: sucess
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LoginResponse'
+        '400':
+          description: bad input parameter
+
+  /api/v1/users/me:
+    get:
+      security:
+        - BearerAuth: []
+      tags:
+        - users
+      summary: Get user´s data by token
+      operationId: api-users-get-me
+      description: Get user´s data by token
+      responses:
+        '200':
+          description: sucess
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '403':
+          description: RecordNotExistException          
+  
+  /api/v1/users/{id}:
+    get:
+      security:
+        - BearerAuth: []
+      tags:
+        - users
+      summary: Get user´s data
+      operationId: api-users-get
+      description: Get user´s data
+      parameters:
+        - name: id
+          in: path
+          description: "Id do usuário"
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: sucess
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteResponse'
+        '403':
+          description: RecordNotExistException          
+    
+    delete:
+      security:
+        - BearerAuth: []
+      tags:
+        - users
+      summary: Delete a user
+      operationId: api-users-delete
+      description: Delete a user
+      parameters:
+        - name: id
+          in: path
+          description: "Id do usuário"
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: sucess
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteResponse'
+        '403':
+          description: RecordNotExistException
+
+    put:
+      security:
+        - BearerAuth: []
+      tags:
+        - users
+      summary: Update a user
+      operationId: api-users-put
+      description: Update a user
+      parameters:
+        - name: id
+          in: path
+          description: "Id do usuário"
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserData'
+      responses:
+        '200':
+          description: sucess
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserData'
+        '403':
+          description: RecordNotExistException
+
+  /api/v1/users/list:
+    get:
+      security:
+        - BearerAuth: []
+      tags:
+        - users
+      summary: List all users
+      operationId: api-users-list
+      description: List all users
+      responses:
+        '200':
+          description: sucess
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserResponse'
+        '400':
+          description: bad input parameter
+
+  /api/v1/events:
+    post:
+      security:
+        - BearerAuth: []
+      tags:
+        - events
+      summary: Passing the appropriate options, you will be able to create an event in the system
+      operationId: api-events-post
+      description: Passing the appropriate options, you will be able to create an event in the system
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventPostBody'
+      responses:
+        '200':
+          description: sucess
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EventPostResponse'
+        '400':
+          description: bad input parameter
+          
+  /api/v1/events/{id}:
+    get:
+      security:
+        - BearerAuth: []
+      tags:
+        - events
+      summary: Get event´s data
+      operationId: api-events-get
+      description: Get event´s data
+      parameters:
+        - name: id
+          in: path
+          description: "Id do evento"
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: sucess
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              examples:
+                RecordNotFound:
+                  $ref: '#/components/examples/RecordNotFound'
+
+    delete:
+      security:
+        - BearerAuth: []
+      tags:
+        - events
+      summary: Delete a event
+      operationId: api-events-delete
+      description: Delete a event
+      parameters:
+        - name: id
+          in: path
+          description: "Id do evento"
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: sucess
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              examples:
+                EventHasWorlds:
+                  $ref: '#/components/examples/EventHasWorlds'
+                EventsHasGuests:
+                  $ref: '#/components/examples/EventsHasGuests'
+                RecordNotFound:
+                  $ref: '#/components/examples/RecordNotFound'
+
+    put:
+      security:
+        - BearerAuth: []
+      tags:
+        - events
+      summary: Change one or more event fields
+      operationId: api-events-put
+      description: Change one or more event fields
+      parameters:
+        - name: id
+          in: path
+          description: "Id do evento"
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventPutBody'
+      responses:
+        '200':
+          description: sucess
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventPostResponse'
+        '403':
+          description: RecordNotExistException
+
+  /api/v1/events/list:
+    get:
+      security:
+        - BearerAuth: []
+      tags:
+        - events
+      summary: List all events ( See Description )
+      operationId: api-events-list
+      description: >
+        List all events.
+        If the user has the root role, assigned only to Nuxverse users, all events should be listed.
+        If the user does not have the root role, the route should return only events where the user is an administrator or has been invited.
+      responses:
+        '200':
+          description: sucess
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventsListResponse'
+        '400':
+          description: bad input parameter
+          
+  /api/v1/events/list/false:
+    get:
+      security:
+        - BearerAuth: []
+      tags:
+        - events
+      summary: List all events ( See Description )
+      operationId: api-events-list-false
+      description: >
+        List all events.
+        If the user has the root role, this route should return only events that belong to that user.
+        If the user does not have the root role, this route should return only events where the user is an administrator or has been invited.
+      responses:
+        '200':
+          description: sucess
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventsListResponse'
+        '400':
+          description: bad input parameter
+
+  /api/v1/events/list/true:
+    get:
+      security:
+        - BearerAuth: []
+      tags:
+        - events
+      summary: List all events ( See Description )
+      operationId: api-events-list-true
+      description: >
+        List all events.
+        If the user has the root role, this route should return all events, regardless of whether they belong to them or not.
+        If the user does not have the root role, this route should return only events where the user is an administrator or has been invited.
+      responses:
+        '200':
+          description: sucess
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventsListResponse'
+        '400':
+          description: bad input parameter
+
+  /api/v1/events/subscribed/{userId}:
+    get:
+      security:
+        - BearerAuth: []
+      tags:
+        - events
+      summary: By passing appropriate options, you can get all event information
+      operationId: api-events-subscribed-post
+      description: "UTILIZE USER ID : 6871308825489770 PARA EFETUAR TESTES"
+      parameters:
+        - name: userId
+          in: path
+          description: "ID do usuário - Utilize 6871308825489770 para fazer teste ou qualquer outro que esteja com evento configurado"
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: sucess
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventsSubscribedResponse'
+        '400':
+          description: bad input parameter
+
+  /api/v1/events/user-in-event/{eventId}:
+    get:
+      security:
+        - BearerAuth: []
+      tags:
+        - events
+      summary: Check if current user is in this event by user in token
+      operationId: api-events-userInEvent
+      description: Check if current user is in this event by user in token
+      parameters:
+        - name: eventId
+          in: path
+          description: "Id do evento"
+          required: true
+          schema:
+            type: string
+            example: 1503270393793171
+
+      responses:
+        '200':
+          description: sucess
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  userInEvent:
+                    type: boolean
+                    example: true
+        '400':
+          description: bad input parameter
+          
+  /api/v1/worlds:
+    post:
+      security:
+        - BearerAuth: []
+      tags:
+        - worlds
+      summary: Passing the appropriate options, you will be able to create an world in the system
+      operationId: api-world-post
+      description: Passing the appropriate options, you will be able to create an world in the system
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WorldPostBody'
+      responses:
+        '200':
+          description: sucess
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/WorldPostResponse'
+        '400':
+          description: bad input parameter
+
+  /api/v1/worlds/{id}:
+    get:
+      security:
+        - BearerAuth: []
+      tags:
+        - worlds
+      summary: Get world´s data
+      operationId: api-worlds-get
+      description: Get world´s data
+      parameters:
+        - name: id
+          in: path
+          description: "World Id"
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: sucess
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              examples:
+                RecordNotFound:
+                  $ref: '#/components/examples/RecordNotFound'
+
+    delete:
+      security:
+        - BearerAuth: []
+      tags:
+        - worlds
+      summary: Delete a world
+      operationId: api-worlds-delete
+      description: Delete a world
+      parameters:
+        - name: id
+          in: path
+          description: "World Id"
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: sucess
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              examples:
+                WorldHasProps:
+                  $ref: '#/components/examples/WorldsHasProps'
+                RecordNotFound:
+                  $ref: '#/components/examples/RecordNotFound'
+
+    put:
+      security:
+        - BearerAuth: []
+      tags:
+        - worlds
+      summary: Change one or more world fields
+      operationId: api-worlds-put
+      description: Change one or more world fields
+      parameters:
+        - name: id
+          in: path
+          description: "World Id"
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WorldPutBody'
+      responses:
+        '200':
+          description: sucess
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorldPostResponse'
+        '403':
+          description: RecordNotExistException
+
+  /api/v1/worlds/list:
+    get:
+      security:
+        - BearerAuth: []
+      tags:
+        - worlds
+      summary: List all worlds
+      operationId: api-worlds-list
+      description: "List all worlds"
+
+      responses:
+        '200':
+          description: sucess
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorldsListResponse'
+        '400':
+          description: bad input parameter
+
+  /api/v1/worlds/list/event/{eventId}:
+    get:
+      security:
+        - BearerAuth: []
+      tags:
+        - worlds
+      summary: List worlds by Event
+      operationId: api-worlds-listByEvents
+      description: "List worlds by Event"
+      parameters:
+        - name: eventId
+          in: path
+          description: "Event Id"
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: sucess
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorldsListResponse'
+        '400':
+          description: bad input parameter
+
+
+  /api/v1/props:
+    post:
+      security:
+        - BearerAuth: []
+      tags:
+        - props
+      summary: Passing the appropriate options, you will be able to create props in the system
+      operationId: api-props-post
+      description: Passing the appropriate options, you will be able to create props in the system
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PropsPostBody'
+      responses:
+        '200':
+          description: sucess
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PropsPostResponse'
+        '400':
+          description: bad input parameter
+
+  /api/v1/props/{id}:
+    get:
+      security:
+        - BearerAuth: []
+      tags:
+        - props
+      summary: Get prop´s data
+      operationId: api-props-get
+      description: Get prop´s data
+      parameters:
+        - name: id
+          in: path
+          description: "Prop Id"
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: sucess
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              examples:
+                RecordNotFound:
+                  $ref: '#/components/examples/RecordNotFound'
+
+    delete:
+      security:
+        - BearerAuth: []
+      tags:
+        - props
+      summary: Delete a prop
+      operationId: api-props-delete
+      description: Delete a prop
+      parameters:
+        - name: id
+          in: path
+          description: "Prop Id"
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: sucess
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              examples:
+                RecordNotFound:
+                  $ref: '#/components/examples/RecordNotFound'
+
+    put:
+      security:
+        - BearerAuth: []
+      tags:
+        - props
+      summary: Change one or more prop fields
+      operationId: api-props-put
+      description: Change one or more prop fields
+      parameters:
+        - name: id
+          in: path
+          description: "Prop Id"
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PropsPutBody'
+      responses:
+        '200':
+          description: sucess
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PropsPostResponse'
+        '403':
+          description: RecordNotExistException
+
+  /api/v1/props/list:
+    get:
+      security:
+        - BearerAuth: []
+      tags:
+        - props
+      summary: List all props
+      operationId: api-props-list
+      description: List all props
+      responses:
+        '200':
+          description: sucess
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PropsListResponse'
+        '400':
+          description: bad input parameter
+
+  /api/v1/guests:
+    post:
+      security:
+        - BearerAuth: []
+      tags:
+        - guests
+      summary: Passing the appropriate options, you will be able to invite guests to worlds
+      operationId: api-guests-post
+      description: Passing the appropriate options, you will be able to invite guests to worlds
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GuestsPostBody'
+      responses:
+        '200':
+          description: sucess
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GuestsPostResponse'
+        '400':
+          description: bad input parameter
+
+  /api/v1/guests/{id}:
+    get:
+      security:
+        - BearerAuth: []
+      tags:
+        - guests
+      summary: Get guest´s data
+      operationId: api-guests-get
+      description: Get guest´s data
+      parameters:
+        - name: id
+          in: path
+          description: "Guest Id"
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: sucess
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              examples:
+                RecordNotFound:
+                  $ref: '#/components/examples/RecordNotFound'
+
+    delete:
+      security:
+        - BearerAuth: []
+      tags:
+        - guests
+      summary: Delete a guest
+      operationId: api-guests-delete
+      description: Delete a guest
+      parameters:
+        - name: id
+          in: path
+          description: "Guest Id"
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: sucess
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              examples:
+                RecordNotFound:
+                  $ref: '#/components/examples/RecordNotFound'
+
+    put:
+      security:
+        - BearerAuth: []
+      tags:
+        - guests
+      summary: Change one or more guest fields
+      operationId: api-guests-put
+      description: Change one or more guest fields
+      parameters:
+        - name: id
+          in: path
+          description: "Guest Id"
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GuestsPutBody'
+      responses:
+        '200':
+          description: sucess
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GuestsPostResponse'
+        '403':
+          description: RecordNotExistException
+
+  /api/v1/guests/list:
+    get:
+      security:
+        - BearerAuth: []
+      tags:
+        - guests
+      summary: List all guest
+      operationId: api-guests-list
+      description: List all guest
+      responses:
+        '200':
+          description: sucess
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GuestsListResponse'
+        '400':
+          description: bad input parameter
+
+  /api/v1/guests/list/event/{eventId}:
+    get:
+      security:
+        - BearerAuth: []
+      tags:
+        - guests
+      summary: List guests By Event
+      operationId: api-guests-listByEvent
+      description: List guests by Event
+      parameters:
+        - name: eventId
+          in: path
+          description: "Event Id"
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: sucess
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GuestsListResponse'
+        '400':
+          description: bad input parameter
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  examples:
+    WorldsHasProps:
+      value:
+        error: World has Props
+    EventHasWorlds:
+      value:
+        error: Event has Worlds
+    EventsHasGuests:
+      value:
+        error: Events has Guests
+    RecordNotFound:
+      value:
+        error: Record not Found
+    PreSignedImage:
+      value: 
+        url-image: https://s3.amazonaws.com/assets.cms.dev.nuxverse.com/users/001172620833001/events/111111111111/worlds/222222222222/assets/images/8846232b-629e-4aab-8743-1f2ad76e2e0c-imageName3.png?Content-Type=image%2Fpng&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=eretwgrew%2F20230501%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20230501T151309Z&X-Amz-Expires=86400&X-Amz-Security-
+        url-thumbnail: https://s3.amazonaws.com/assets.cms.dev.nuxverse.com/users/001172620833001/events/111111111111/worlds/222222222222/assets/images/8846232b-629e-4aab-8743-1f2ad76e2e0c-imageName3.png?Content-Type=image%2Fpng&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=dstetre%2F20230501%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20230501T151309Z&X-Amz-Expires=86400&X-Amz-Security-
+    PreSignedVideo:
+      value: 
+        url-image: https://s3.amazonaws.com/assets.cms.dev.nuxverse.com/users/001172620833001/events/111111111111/worlds/222222222222/assets/videos/8846232b-629e-4aab-8743-1f2ad76e2e0c-disney.mp4?Content-Type=image%2Fpng&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=eretwgrew%2F20230501%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20230501T151309Z&X-Amz-Expires=86400&X-Amz-Security-
+        url-thumbnail: https://s3.amazonaws.com/assets.cms.dev.nuxverse.com/users/001172620833001/events/111111111111/worlds/222222222222/assets/images/8846232b-629e-4aab-8743-1f2ad76e2e0c-imageName3.png?Content-Type=image%2Fpng&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=dstetre%2F20230501%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20230501T151309Z&X-Amz-Expires=86400&X-Amz-Security-
+    PreSignedOthers:
+      value: 
+        url-asset: https://s3.amazonaws.com/assets.cms.dev.nuxverse.com/users/001172620833001/events/111111111111/worlds/222222222222/assets/others/8846232b-629e-4aab-8743-1f2ad76e2e0c-disney.pdf?Content-Type=image%2Fpng&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=eretwgrew%2F20230501%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20230501T151309Z&X-Amz-Expires=86400&X-Amz-Security-
+        url-image: https://s3.amazonaws.com/assets.cms.dev.nuxverse.com/users/001172620833001/events/111111111111/worlds/222222222222/assets/images/8846232b-629e-4aab-8743-1f2ad76e2e0c-disney-img.png?Content-Type=image%2Fpng&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=eretwgrew%2F20230501%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20230501T151309Z&X-Amz-Expires=86400&X-Amz-Security-
+        url-thumbnail: https://s3.amazonaws.com/assets.cms.dev.nuxverse.com/users/001172620833001/events/111111111111/worlds/222222222222/assets/images/8846232b-629e-4aab-8743-1f2ad76e2e0c-imageName3-thumbnail.png?Content-Type=image%2Fpng&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=dstetre%2F20230501%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20230501T151309Z&X-Amz-Expires=86400&X-Amz-Security-
+  schemas:
+    LoginBody:
+      type: object
+      properties:
+        email:
+          type: string
+          example: johnwick@gmail.com
+        password:
+          type: string
+          example: john123
+      required:
+        - email
+        - password
+
+    GetPresignedUrlBody:
+      type: object
+      properties:
+        eventId:
+          type: string
+          example: 111111111111
+        wordId:
+          type: string
+          example: 222222222222
+        filename:
+          type: string
+          example: imageName.png
+      required:
+        - filename
+
+    SocialLoginBody:
+      type: object
+      properties:
+        email:
+          type: string
+          example: johnwick@gmail.com
+        wixId:
+          type: string
+          example: 113355
+        firstName:
+          type: string
+          example: John
+        lastName:
+          type: string
+          example: Wick
+      required:
+        - email
+        - wixId
+        - firstName
+        - lastName
+  
+    RegisterBody:
+      type: object
+      properties:
+        email:
+          type: string
+          example: johnwick@gmail.com
+        password:
+          type: string
+          example: 113355
+        wixId:
+          type: string
+          example: d701748f0851
+        firstName:
+          type: string
+          example: John
+        lastName:
+          type: string
+          example: Wick
+        profileImage:
+          type: string
+          example: https://picsum.photos/id/237/200/300
+        role:
+          type: string
+          example: ADMIN
+      required:
+        - email
+        - password
+        - firstName
+        - lastName
+
+    LoginResponse:
+      type: object
+      required:
+        - id
+        - email
+        - firstName
+        - lastName
+      properties:
+        user:
+          $ref: '#/components/schemas/UserResponse'
+        token:
+          $ref: '#/components/schemas/Token'
+
+    UserData:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          example: 'jonhwick@gmail.com'
+        firstName:
+          type: string
+          example: John
+        lastName:
+          type: string
+          example: Wick
+        profileImage:
+          type: string
+          example: https://picsum.photos/id/237/200/3001.png
+        role:
+          type: string
+          example: ADMIN
+
+    UserResponse:
+      required:
+        - email
+        - password
+        - firstName
+        - lastName
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        email:
+          type: string
+          format: email
+          example: 'jonhwick@gmail.com'
+        firstName:
+          type: string
+          example: John
+        lastName:
+          type: string
+          example: Wick
+        profileImage:
+          type: string
+          example: https://picsum.photos/id/237/200/300
+        role:
+          type: string
+          example: ADMIN
+        avatar:
+          type: string
+          example: https://realplayerme/id/237/200/300
+        avatarType:
+          type: string
+          example: RPM
+
+    Token:
+      type: string
+      example: eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImpvaG53aWNrQGdtYWlsLmNvbSIsImlkIjoiMjgzNTc2MT
+
+    EventPutBody:
+      description: Change one or more event fields
+      type: object
+      properties:
+        friendlyId:
+          type: string
+          example: jsonwickevent          
+        name:
+          type: string
+          example: John Wick - Event
+        startDate:
+          type: number
+          example: 1680375609000
+        endDate:
+          type: number
+          example: 1680375609000
+        minAge:
+          type: integer
+          example: 18
+        private:
+          type: boolean
+          example: true
+
+    EventPostBody:
+      type: object
+      required:
+        - name
+        - startDate
+        - endDate
+        - minAge
+        - private
+      properties:
+        name:
+          type: string
+          example: John wick - Event
+        startDate:
+          type: string
+          example: 1680375609000
+        endDate:
+          type: string
+          example: 1680375609000
+        minAge:
+          type: integer
+          example: 18
+        private:
+          type: boolean
+          example: true
+
+    S3UrlResponse1:
+      type: object
+      properties:
+        url-image:
+          type: string
+          example: https://s3.amazonaws.com/assets.cms.dev.nuxverse.com/images/teste.png?Content-Type=image%2Fpng&X-Amz-Algorithm=AWS4-HMAC-SHA256&-Amz-Credentialb9b4ff483f39fb7dasDSADfd60e3850b0a99f5a4ca507cfe20e8SDasd101807ca63938c6999&Xe=zsdxsb83f39fb7dfd60e3850b0a99f5a4ca507cfe20e8101807ca63938c6999&X-Amz-SignedHeaders=host%3Bx-amz-acl&x-amz-acl=publi-read
+        url-thumbnail:
+          type: string
+          example: https://s3.amazonaws.com/assets.cms.dev.nuxverse.com/images/teste-thumbnail.png?Content-Type=image%2Fpng&X-Amz-Algorithm=AWS4-HMAC-SHA256&-Amz-Credentialb9b4ff483f39fb7dasDSADfd60e3850b0a99f5a4ca507cfe20e8SDasd101807ca63938c6999&Xe=zsdxsb83f39fb7dfd60e3850b0a99f5a4ca507cfe20e8101807ca63938c6999&X-Amz-SignedHeaders=host%3Bx-amz-acl&x-amz-acl=publi-read
+
+    S3UrlResponse2:
+      type: object
+      properties:
+        url-asset:
+          type: string
+          example: https://s3.amazonaws.com/assets.cms.dev.nuxverse.com/images/teste.png?Content-Type=image%2Fpng&X-Amz-Algorithm=AWS4-HMAC-SHA256&-Amz-Credentialb9b4ff483f39fb7dasDSADfd60e3850b0a99f5a4ca507cfe20e8SDasd101807ca63938c6999&Xe=zsdxsb83f39fb7dfd60e3850b0a99f5a4ca507cfe20e8101807ca63938c6999&X-Amz-SignedHeaders=host%3Bx-amz-acl&x-amz-acl=publi-read
+        url-image:
+          type: string
+          example: https://s3.amazonaws.com/assets.cms.dev.nuxverse.com/images/teste.png?Content-Type=image%2Fpng&X-Amz-Algorithm=AWS4-HMAC-SHA256&-Amz-Credentialb9b4ff483f39fb7dasDSADfd60e3850b0a99f5a4ca507cfe20e8SDasd101807ca63938c6999&Xe=zsdxsb83f39fb7dfd60e3850b0a99f5a4ca507cfe20e8101807ca63938c6999&X-Amz-SignedHeaders=host%3Bx-amz-acl&x-amz-acl=publi-read
+        url-thumbnail:
+          type: string
+          example: https://s3.amazonaws.com/assets.cms.dev.nuxverse.com/images/teste-thumbnail.png?Content-Type=image%2Fpng&X-Amz-Algorithm=AWS4-HMAC-SHA256&-Amz-Credentialb9b4ff483f39fb7dasDSADfd60e3850b0a99f5a4ca507cfe20e8SDasd101807ca63938c6999&Xe=zsdxsb83f39fb7dfd60e3850b0a99f5a4ca507cfe20e8101807ca63938c6999&X-Amz-SignedHeaders=host%3Bx-amz-acl&x-amz-acl=publi-read
+
+    EventPostResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 8245029042131814
+        friendlyId:
+          type: string
+          example: jsonwickevent          
+        name:
+          type: string
+          example: John Wick - Event
+        startDate:
+          type: number
+          example: 1680375609000
+        endDate:
+          type: number
+          example: 1680375609000
+        minAge:
+          type: integer
+          example: 18
+        private:
+          type: boolean
+          example: true
+        createdAt:
+          type: number
+          example: 1680375609000
+        updatedAt:
+          type: number
+          example: 1680375609000
+
+    WorldPostBody:
+      type: object
+      required:
+        - name
+        - startDate
+        - endDate
+        - minAge
+        - private
+      properties:
+        eventId:
+          type: string
+          example: 8245029042131814
+        name:
+          type: string
+          example: John Wick - World
+        startDate:
+          type: string
+          example: 1680375609000
+        endDate:
+          type: string
+          example: 1680375609000
+        minAge:
+          type: integer
+          example: 18
+        private:
+          type: boolean
+          example: true
+
+    WorldPutBody:
+      type: object
+      properties:
+        name:
+          type: string
+          example: John Wick - World
+        startDate:
+          type: string
+          example: 1680375609000
+        endDate:
+          type: string
+          example: 1680375609000
+        minAge:
+          type: integer
+          example: 18
+        private:
+          type: boolean
+          example: true
+
+    WorldPostResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 8245029042131814
+        eventId:
+          type: string
+          example: 8245029042131814
+        friendlyId:
+          type: string
+          example: jsonwickworld       
+        name:
+          type: string
+          example: John Wick - World
+        startDate:
+          type: number
+          example: 1680375609000
+        endDate:
+          type: number
+          example: 1680375609000
+        minAge:
+          type: integer
+          example: 18
+        private:
+          type: boolean
+          example: true
+        createdAt:
+          type: number
+          example: 1680375609000
+        updatedAt:
+          type: number
+          example: 1680375609000
+
+    PropsPostBody:
+      type: object
+      required:
+        - name
+        - worldId
+        - ueIdentifier
+      properties:
+        worldId:
+          type: string
+          example: 8518817337982296
+        ueIdentifier:
+          type: string
+          example: unique_id_2
+        name:
+          type: string
+          example: Dragon
+        previewImage:
+          type: string
+          example: https://picsum.photos/id/237/200/300
+        position:
+          type: string
+          example: [0,0,0]
+        rotation:
+          type: string
+          example: [0,0,0]
+        size:
+          type: string
+          example: [1,1,1]
+        assetUrl:
+          type: string
+          example: https://awesomesaucelabs.github.io/piglet-webgl-demo/StreamingAssets/dragon_celebration_etc1s_draco.glb
+        mediaType:
+          type: string
+          example: GLTP
+
+    PropsPutBody:
+      type: object
+      properties:
+        worldId:
+          type: string
+          example: 8518817337982296
+        ueIdentifier:
+          type: string
+          example: unique_id_2
+        name:
+          type: string
+          example: Dragon
+        previewImage:
+          type: string
+          example: https://picsum.photos/id/237/200/300
+        position:
+          type: string
+          example: [0,0,0]
+        rotation:
+          type: string
+          example: [0,0,0]
+        size:
+          type: string
+          example: [1,1,1]
+        assetUrl:
+          type: string
+          example: https://awesomesaucelabs.github.io/piglet-webgl-demo/StreamingAssets/dragon_celebration_etc1s_draco.glb
+        mediaType:
+          type: string
+          example: GLTP
+
+    PropsPostResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 8245029042131814
+        worldId:
+          type: string
+          example: 8518817337982296
+        ueIdentifier:
+          type: string
+          example: unique_id_2
+        name:
+          type: string
+          example: Dragon
+        previewImage:
+          type: string
+          example: https://picsum.photos/id/237/200/300
+        position:
+          type: string
+          example: [0,0,0]
+        rotation:
+          type: string
+          example: [0,0,0]
+        size:
+          type: string
+          example: [1,1,1]
+        assetUrl:
+          type: string
+          example: https://awesomesaucelabs.github.io/piglet-webgl-demo/StreamingAssets/dragon_celebration_etc1s_draco.glb
+        mediaType:
+          type: string
+          example: GLTP
+        createdAt:
+          type: number
+          example: 1680375609000
+        updatedAt:
+          type: number
+          example: 1680375609000
+
+    GuestsPostBody:
+      type: object
+      required:
+        - name
+        - worldId
+        - ueIdentifier
+      properties:
+        userId:
+          type: string
+          example: 1746402902921115
+        eventId:
+          type: string
+          example: 1503270393793171
+        worldId:
+          type: string
+          example: 8518817337982296
+        role:
+          type: string
+          example: ADMIN
+
+    GuestsPutBody:
+      type: object
+      properties:
+        userId:
+          type: string
+          example: 1746402902921115
+        eventId:
+          type: string
+          example: 1503270393793171
+        worldId:
+          type: string
+          example: 8518817337982296
+        role:
+          type: string
+          example: ADMIN
+
+    GuestsPostResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 8245029042131814
+        userId:
+          type: string
+          example: 1746402902921115
+        eventId:
+          type: string
+          example: 1503270393793171
+        worldId:
+          type: string
+          example: 8518817337982296
+        role:
+          type: string
+          example: ADMIN
+        createdAt:
+          type: number
+          example: 1680375609000
+        updatedAt:
+          type: number
+          example: 1680375609000
+          
+    EventsSubscribedResponse:
+      type: object
+      properties:
+        events:
+          type: array
+          items:
+            type: object
+            properties:
+              info:
+                type: object
+                properties:
+                  private:
+                    type: boolean
+                    example: true
+                  endDate:
+                    type: number
+                    example: 1680375609000,
+                  updatedAt:
+                    type: string
+                    example: "2023-04-01T19:43:34.754Z"
+                  startDate:
+                    type: number
+                    example: 1680375609000
+                  createdAt:
+                    type: string
+                    example: "2023-04-01T19:43:34.754Z"
+                  id:
+                    type: string
+                    example: "1503270393793171"
+                  name:
+                    type: string
+                    example: "Disney World 2023"
+                  minAge:
+                    type: integer
+                    example: 18
+              admins:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    avatar:
+                      type: string
+                      example: ""
+                    lastName:
+                      type: string
+                      example: "Wick"
+                    avatarType:
+                      type: string
+                      example: ""
+                    email:
+                      type: string
+                      example: "johnwick@gmail.com"
+                    id:
+                      type: string
+                      example: "6871308825489770"
+                    firstName:
+                      type: string
+                      example: "John"
+                    profileImage:
+                      type: string
+                      example: ""
+                    role:
+                      type: string
+                      example: "MASTER"
+              players:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    avatar:
+                      type: string
+                      example: ""
+                    lastName:
+                      type: string
+                      example: "Wick"
+                    avatarType:
+                      type: string
+                      example: ""
+                    email:
+                      type: string
+                      example: "johnwick@gmail.com"
+                    id:
+                      type: string
+                      example: "6871308825489770"
+                    firstName:
+                      type: string
+                      example: "John"
+                    profileImage:
+                      type: string
+                      example: ""
+                    role:
+                      type: string
+                      example: "MASTER"
+              worlds:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    info:
+                      type: object
+                      properties:
+                        private:
+                          type: boolean
+                          example: true
+                        endDate:
+                          type: number
+                          example: 1680375609000,
+                        updatedAt:
+                          type: string
+                          example: "2023-04-01T19:43:34.754Z"
+                        startDate:
+                          type: number
+                          example: 1680375609000
+                        createdAt:
+                          type: string
+                          example: "2023-04-01T19:43:34.754Z"
+                        id:
+                          type: string
+                          example: "1503270393793171"
+                        name:
+                          type: string
+                          example: "Disney World 2023"
+                        minAge:
+                          type: integer
+                          example: 18
+                    admins:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          avatar:
+                            type: string
+                            example: ""
+                          lastName:
+                            type: string
+                            example: "Wick"
+                          avatarType:
+                            type: string
+                            example: ""
+                          email:
+                            type: string
+                            example: "johnwick@gmail.com"
+                          id:
+                            type: string
+                            example: "6871308825489770"
+                          firstName:
+                            type: string
+                            example: "John"
+                          profileImage:
+                            type: string
+                            example: ""
+                          role:
+                            type: string
+                            example: "MASTER"
+                    players:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          avatar:
+                            type: string
+                            example: ""
+                          lastName:
+                            type: string
+                            example: "Wick"
+                          avatarType:
+                            type: string
+                            example: ""
+                          email:
+                            type: string
+                            example: "johnwick@gmail.com"
+                          id:
+                            type: string
+                            example: "6871308825489770"
+                          firstName:
+                            type: string
+                            example: "John"
+                          profileImage:
+                            type: string
+                            example: ""
+                          role:
+                            type: string
+                            example: "MASTER"
+                    props:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                            example: "4570886303663058"
+                          worldId:
+                            type: string
+                            example: "8518817337982296"
+                          name:
+                            type: string
+                            example: "Raposa"
+                          ueIdentifier:
+                            type: string
+                            example: "unique_id_1"
+                          mediaType:
+                            type: string
+                            example: "GLTF"
+                          previewImage:
+                            type: string
+                            example: https://picsum.photos/id/237/200/300
+                          assetUrl:
+                            type: string
+                            example: https://awesomesaucelabs.github.io/piglet-webgl-demo/StreamingAssets/dragon_celebration_etc1s_draco.glb
+                          createdAt:
+                            type: string
+                            example: "2023-04-02T18:48:41.135Z"
+                          updatedAt:
+                            type: string
+                            example: "2023-04-02T18:48:41.135Z"
+                          position:
+                            type: string
+                            example: [0,0,0]
+                          size:
+                            type: string
+                            example: [1,1,1]
+                          rotation:
+                            type: string
+                            example: [0,0,0]
+                            
+    EventsListResponse:
+      type: object
+      properties:
+        events:
+          type: array
+          items:
+            type: object
+            properties:
+              private:
+                type: boolean
+                example: true
+              end-Date:
+                type: number
+                example: 1680375609000
+              updatedAt:
+                type: string
+                example: "2023-04-01T19:43:34.754Z"
+              startDate:
+                type: number
+                example: 1680375609000
+              createdAt:
+                type: string
+                example: "2023-04-01T19:43:34.754Z"
+              id:
+                type: string
+                example: "1503270393793171"
+              name:
+                type: string
+                example: "Disney World 2023"
+              minAge:
+                type: integer
+                example: 18
+                
+    WorldsListResponse:
+      type: object
+      properties:
+        worlds:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorldPostResponse'
+
+    PropsListResponse:
+      type: object
+      properties:
+        props:
+          type: array
+          items:
+            $ref: '#/components/schemas/PropsPostResponse'
+
+    GuestsListResponse:
+      type: object
+      properties:
+        guests:
+          type: array
+          items:
+            $ref: '#/components/schemas/GuestsPostResponse'
+
+    DeleteResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: success

@@ -1,0 +1,2657 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Nux API V2",
+    "description": "Nux API V2",
+    "contact": {
+      "email": "john-wick@gmail.com"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "version": "2.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://virtserver.swaggerhub.com/DEVELOPMENT_23/NuxverseAPI/2.0.0",
+      "description": "SwaggerHub API Auto Mocking"
+    },
+    {
+      "url": "https://api.cms.dev.nuxverse.com",
+      "description": "Development API Nuxverse"
+    },
+    {
+      "url": "https://api.cms.sand.nuxverse.com",
+      "description": "Sandbox API Nuxverse"
+    },
+    {
+      "url": "https://api.cms.nuxverse.com",
+      "description": "Production API Nuxverse"
+    },
+    {
+      "url": "https://gznuq2tp9d.execute-api.us-east-1.amazonaws.com/dev/",
+      "description": "AWS API Nuxverse"
+    },
+    {
+      "url": "https://virtserver.swaggerhub.com/ANRALEXANDRE/Nux_API_V2/2.0.0",
+      "description": "SwaggerHub API Auto Mocking"
+    }
+  ],
+  "tags": [
+    {
+      "name": "S3",
+      "description": ".."
+    },
+    {
+      "name": "auth",
+      "description": "."
+    },
+    {
+      "name": "users",
+      "description": "."
+    },
+    {
+      "name": "events",
+      "description": "."
+    },
+    {
+      "name": "worlds",
+      "description": "."
+    }
+  ],
+  "paths": {
+    "/generatePreSignedUrl": {
+      "post": {
+        "tags": [
+          "S3"
+        ],
+        "summary": "Requires a pre-signed and authorized URL to upload assets directly to AWS S3",
+        "description": "Requires a pre-signed and authorized URL to upload assets directly to AWS S3\n",
+        "operationId": "s3Url",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetPresignedUrlBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "sucess",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "PreSignedImage": {
+                    "$ref": "#/components/examples/PreSignedImage"
+                  },
+                  "PreSignedVideo": {
+                    "$ref": "#/components/examples/PreSignedVideo"
+                  },
+                  "PreSignedOthers": {
+                    "$ref": "#/components/examples/PreSignedOthers"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/auth/v2/login": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "login to the system by email and password",
+        "description": "By passing in the appropriate options, you can login the system\n",
+        "operationId": "loginV1",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "sucess",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "bad input parameter"
+          }
+        }
+      }
+    },
+    "/auth/v2/social": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "login to the system by email and wixId",
+        "description": "Passing the appropriate options, you can log in to the system by email and wixId. If the user has not been registered, he will be registered by email, wixId, firstName and LastName.\n",
+        "operationId": "socialLoginV1",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SocialLoginBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "sucess",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "bad input parameter"
+          }
+        }
+      }
+    },
+    "/auth/v2/register": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Passing the appropriate options, you will be able to register in the system",
+        "description": "Passing the appropriate options, you will be able to register in the system",
+        "operationId": "registerV1",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "sucess",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LoginResponse"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "bad input parameter"
+          }
+        }
+      }
+    },
+    "/api/v2/users/me": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Get user´s data by token",
+        "description": "Get user´s data by token",
+        "operationId": "api-users-get-me",
+        "responses": {
+          "200": {
+            "description": "sucess",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "RecordNotExistException"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v2/users/{id}": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Get user´s data",
+        "description": "Get user´s data",
+        "operationId": "api-users-get",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id do usuário",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "sucess",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_200"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "RecordNotExistException"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Update a user",
+        "description": "Update a user",
+        "operationId": "api-users-put",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id do usuário",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserData"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "sucess",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_200"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "RecordNotExistException"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Delete a user",
+        "description": "Delete a user",
+        "operationId": "api-users-delete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id do usuário",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "sucess",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "RecordNotExistException"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v2/users/list": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "List all users",
+        "description": "List all users",
+        "operationId": "api-users-list",
+        "responses": {
+          "200": {
+            "description": "sucess",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserListResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "bad input parameter"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v2/events": {
+      "post": {
+        "tags": [
+          "events"
+        ],
+        "summary": "Passing the appropriate options, you will be able to create an event in the system",
+        "description": "Passing the appropriate options, you will be able to create an event in the system",
+        "operationId": "api-events-post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EventPostBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "sucess",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EventPostResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "bad input parameter"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v2/events/{id}": {
+      "get": {
+        "tags": [
+          "events"
+        ],
+        "summary": "Get event´s data",
+        "description": "Get event´s data",
+        "operationId": "api-events-get",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id do evento",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "sucess",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EventPostResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "RecordNotFound": {
+                    "$ref": "#/components/examples/RecordNotFound"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "events"
+        ],
+        "summary": "Change one or more event fields",
+        "description": "Change one or more event fields",
+        "operationId": "api-events-put",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id do evento",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EventPutBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "sucess",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EventPostResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "RecordNotExistException"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "events"
+        ],
+        "summary": "Delete a event",
+        "description": "Delete a event",
+        "operationId": "api-events-delete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id do evento",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "sucess",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "EventHasWorlds": {
+                    "$ref": "#/components/examples/EventHasWorlds"
+                  },
+                  "EventsHasGuests": {
+                    "$ref": "#/components/examples/EventsHasGuests"
+                  },
+                  "RecordNotFound": {
+                    "$ref": "#/components/examples/RecordNotFound"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v2/events/list": {
+      "get": {
+        "tags": [
+          "events"
+        ],
+        "summary": "List all events ( See Description )",
+        "description": "List all events. If the user has the root role, assigned only to Nuxverse users, all events should be listed. If the user does not have the root role, the route should return only events where the user is an administrator or has been invited.\n",
+        "operationId": "api-events-list",
+        "responses": {
+          "200": {
+            "description": "sucess",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EventsListResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "bad input parameter"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v2/events/list/false": {
+      "get": {
+        "tags": [
+          "events"
+        ],
+        "summary": "List all events ( See Description )",
+        "description": "List all events. If the user has the root role, this route should return only events that belong to that user. If the user does not have the root role, this route should return only events where the user is an administrator or has been invited.\n",
+        "operationId": "api-events-list-false",
+        "responses": {
+          "200": {
+            "description": "sucess",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EventsListResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "bad input parameter"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v2/events/list/true": {
+      "get": {
+        "tags": [
+          "events"
+        ],
+        "summary": "List all events ( See Description )",
+        "description": "List all events. If the user has the root role, this route should return all events, regardless of whether they belong to them or not. If the user does not have the root role, this route should return only events where the user is an administrator or has been invited.\n",
+        "operationId": "api-events-list-true",
+        "responses": {
+          "200": {
+            "description": "sucess",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EventsListResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "bad input parameter"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v2/events/subscribed/{userId}": {
+      "get": {
+        "tags": [
+          "events"
+        ],
+        "summary": "By passing appropriate options, you can get all event information",
+        "description": "UTILIZE USER ID : 6871308825489770 PARA EFETUAR TESTES",
+        "operationId": "api-events-subscribed-post",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "ID do usuário - Utilize 6871308825489770 para fazer teste ou qualquer outro que esteja com evento configurado",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "sucess",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EventsSubscribedResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "bad input parameter"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v2/events/user-in-event/{eventId}": {
+      "get": {
+        "tags": [
+          "events"
+        ],
+        "summary": "Check if current user is in this event by user in token",
+        "description": "Check if current user is in this event by user in token",
+        "operationId": "api-events-userInEvent",
+        "parameters": [
+          {
+            "name": "eventId",
+            "in": "path",
+            "description": "Id do evento",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "example": "1503270393793171"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "sucess",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_200_1"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "bad input parameter"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v2/worlds": {
+      "post": {
+        "tags": [
+          "worlds"
+        ],
+        "summary": "Passing the appropriate options, you will be able to create an world in the system",
+        "description": "Passing the appropriate options, you will be able to create an world in the system",
+        "operationId": "api-world-post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WorldPostBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "sucess",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorldResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "bad input parameter"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v2/worlds/{id}": {
+      "get": {
+        "tags": [
+          "worlds"
+        ],
+        "summary": "Get world´s data",
+        "description": "Get world´s data",
+        "operationId": "api-worlds-get",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "World Id",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "sucess",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorldResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "RecordNotFound": {
+                    "$ref": "#/components/examples/RecordNotFound"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "worlds"
+        ],
+        "summary": "Change one or more world fields",
+        "description": "Change one or more world fields",
+        "operationId": "api-worlds-put",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "World Id",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WorldPutBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "sucess",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorldResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "RecordNotExistException"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "worlds"
+        ],
+        "summary": "Delete a world",
+        "description": "Delete a world",
+        "operationId": "api-worlds-delete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "World Id",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "sucess",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "WorldHasProps": {
+                    "$ref": "#/components/examples/WorldsHasProps"
+                  },
+                  "RecordNotFound": {
+                    "$ref": "#/components/examples/RecordNotFound"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v2/worlds/list": {
+      "get": {
+        "tags": [
+          "worlds"
+        ],
+        "summary": "List all worlds",
+        "description": "List all worlds",
+        "operationId": "api-worlds-list",
+        "responses": {
+          "200": {
+            "description": "sucess",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorldsListResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "bad input parameter"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v2/worlds/list/event/{eventId}": {
+      "get": {
+        "tags": [
+          "worlds"
+        ],
+        "summary": "List worlds by Event",
+        "description": "List worlds by Event",
+        "operationId": "api-worlds-listByEvents",
+        "parameters": [
+          {
+            "name": "eventId",
+            "in": "path",
+            "description": "Event Id",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "sucess",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorldsListResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "bad input parameter"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v2/props": {
+      "post": {
+        "tags": [
+          "props"
+        ],
+        "summary": "Passing the appropriate options, you will be able to create props in the system",
+        "description": "Passing the appropriate options, you will be able to create props in the system",
+        "operationId": "api-props-post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PropsPostBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "sucess",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PropsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "bad input parameter"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v2/props/{id}": {
+      "get": {
+        "tags": [
+          "props"
+        ],
+        "summary": "Get prop´s data",
+        "description": "Get prop´s data",
+        "operationId": "api-props-get",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Prop Id",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "sucess",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PropsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "RecordNotFound": {
+                    "$ref": "#/components/examples/RecordNotFound"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "props"
+        ],
+        "summary": "Change one or more prop fields",
+        "description": "Change one or more prop fields",
+        "operationId": "api-props-put",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Prop Id",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PropsPutBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "sucess",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PropsResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "RecordNotExistException"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "props"
+        ],
+        "summary": "Delete a prop",
+        "description": "Delete a prop",
+        "operationId": "api-props-delete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Prop Id",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "sucess",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "RecordNotFound": {
+                    "$ref": "#/components/examples/RecordNotFound"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v2/props/list": {
+      "get": {
+        "tags": [
+          "props"
+        ],
+        "summary": "List all props",
+        "description": "List all props",
+        "operationId": "api-props-list",
+        "responses": {
+          "200": {
+            "description": "sucess",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PropsListResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "bad input parameter"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v2/guests": {
+      "post": {
+        "tags": [
+          "guests"
+        ],
+        "summary": "Passing the appropriate options, you will be able to invite guests to worlds",
+        "description": "Passing the appropriate options, you will be able to invite guests to worlds",
+        "operationId": "api-guests-post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GuestsPostBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "sucess",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GuestsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "bad input parameter"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v2/guests/{id}": {
+      "get": {
+        "tags": [
+          "guests"
+        ],
+        "summary": "Get guest´s data",
+        "description": "Get guest´s data",
+        "operationId": "api-guests-get",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Guest Id",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "sucess",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GuestsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "RecordNotFound": {
+                    "$ref": "#/components/examples/RecordNotFound"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "guests"
+        ],
+        "summary": "Change one or more guest fields",
+        "description": "Change one or more guest fields",
+        "operationId": "api-guests-put",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Guest Id",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GuestsPutBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "sucess",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GuestsResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "RecordNotExistException"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "guests"
+        ],
+        "summary": "Delete a guest",
+        "description": "Delete a guest",
+        "operationId": "api-guests-delete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Guest Id",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "sucess",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "RecordNotFound": {
+                    "$ref": "#/components/examples/RecordNotFound"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v2/guests/list": {
+      "get": {
+        "tags": [
+          "guests"
+        ],
+        "summary": "List all guest",
+        "description": "List all guest",
+        "operationId": "api-guests-list",
+        "responses": {
+          "200": {
+            "description": "sucess",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GuestsListResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "bad input parameter"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v2/guests/list/event/{eventId}": {
+      "get": {
+        "tags": [
+          "guests"
+        ],
+        "summary": "List guests By Event",
+        "description": "List guests by Event",
+        "operationId": "api-guests-listByEvent",
+        "parameters": [
+          {
+            "name": "eventId",
+            "in": "path",
+            "description": "Event Id",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "sucess",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GuestsListResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "bad input parameter"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "LoginBody": {
+        "required": [
+          "email",
+          "password"
+        ],
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "johnwick@gmail.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "john123"
+          }
+        }
+      },
+      "GetPresignedUrlBody": {
+        "required": [
+          "filename"
+        ],
+        "type": "object",
+        "properties": {
+          "eventId": {
+            "type": "string",
+            "example": "111111111111"
+          },
+          "wordId": {
+            "type": "string",
+            "example": "222222222222"
+          },
+          "filename": {
+            "type": "string",
+            "example": "imageName.png"
+          }
+        }
+      },
+      "SocialLoginBody": {
+        "required": [
+          "email",
+          "firstName",
+          "lastName",
+          "wixId"
+        ],
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "johnwick@gmail.com"
+          },
+          "wixId": {
+            "type": "string",
+            "example": "113355"
+          },
+          "firstName": {
+            "type": "string",
+            "example": "John"
+          },
+          "lastName": {
+            "type": "string",
+            "example": "Wick"
+          }
+        }
+      },
+      "RegisterBody": {
+        "required": [
+          "email",
+          "firstName",
+          "lastName",
+          "password"
+        ],
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "johnwick@gmail.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "113355"
+          },
+          "wixId": {
+            "type": "string",
+            "example": "d701748f0851"
+          },
+          "firstName": {
+            "type": "string",
+            "example": "John"
+          },
+          "lastName": {
+            "type": "string",
+            "example": "Wick"
+          },
+          "profileImage": {
+            "type": "string",
+            "example": "https://picsum.photos/id/237/200/300"
+          },
+          "role": {
+            "type": "string",
+            "example": "ADMIN"
+          }
+        }
+      },
+      "LoginResponse": {
+        "required": [
+          "email",
+          "firstName",
+          "id",
+          "lastName"
+        ],
+        "type": "object",
+        "properties": {
+          "user": {
+            "$ref": "#/components/schemas/UserResponse"
+          },
+          "token": {
+            "$ref": "#/components/schemas/Token"
+          }
+        }
+      },
+      "UserData": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "jonhwick@gmail.com"
+          },
+          "firstName": {
+            "type": "string",
+            "example": "John"
+          },
+          "lastName": {
+            "type": "string",
+            "example": "Wick"
+          },
+          "profileImage": {
+            "type": "string",
+            "example": "https://picsum.photos/id/237/200/3001.png"
+          },
+          "role": {
+            "type": "string",
+            "example": "ADMIN"
+          }
+        }
+      },
+      "UserResponse": {
+        "required": [
+          "email",
+          "firstName",
+          "lastName",
+          "password"
+        ],
+        "type": "object",
+        "properties": {
+          "info": {
+            "$ref": "#/components/schemas/UserResponse_info"
+          }
+        }
+      },
+      "UserListResponse": {
+        "required": [
+          "email",
+          "firstName",
+          "lastName",
+          "password"
+        ],
+        "type": "object",
+        "properties": {
+          "users": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UserListResponse_users"
+            }
+          }
+        }
+      },
+      "Token": {
+        "type": "string",
+        "example": "eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImpvaG53aWNrQGdtYWlsLmNvbSIsImlkIjoiMjgzNTc2MT"
+      },
+      "EventPutBody": {
+        "type": "object",
+        "properties": {
+          "friendlyId": {
+            "type": "string",
+            "example": "jsonwickevent"
+          },
+          "name": {
+            "type": "string",
+            "example": "John Wick - Event"
+          },
+          "startDate": {
+            "type": "number",
+            "example": 1680375609000
+          },
+          "endDate": {
+            "type": "number",
+            "example": 1680375609000
+          },
+          "minAge": {
+            "type": "integer",
+            "example": 18
+          },
+          "private": {
+            "type": "boolean",
+            "example": true
+          }
+        },
+        "description": "Change one or more event fields"
+      },
+      "EventPostBody": {
+        "required": [
+          "endDate",
+          "minAge",
+          "name",
+          "private",
+          "startDate"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "John wick - Event"
+          },
+          "startDate": {
+            "type": "string",
+            "example": "1680375609000"
+          },
+          "endDate": {
+            "type": "string",
+            "example": "1680375609000"
+          },
+          "minAge": {
+            "type": "integer",
+            "example": 18
+          },
+          "private": {
+            "type": "boolean",
+            "example": true
+          }
+        }
+      },
+      "S3UrlResponse1": {
+        "type": "object",
+        "properties": {
+          "url-image": {
+            "type": "string",
+            "example": "https://s3.amazonaws.com/assets.cms.dev.nuxverse.com/images/teste.png?Content-Type=image%2Fpng&X-Amz-Algorithm=AWS4-HMAC-SHA256&-Amz-Credentialb9b4ff483f39fb7dasDSADfd60e3850b0a99f5a4ca507cfe20e8SDasd101807ca63938c6999&Xe=zsdxsb83f39fb7dfd60e3850b0a99f5a4ca507cfe20e8101807ca63938c6999&X-Amz-SignedHeaders=host%3Bx-amz-acl&x-amz-acl=publi-read"
+          },
+          "url-thumbnail": {
+            "type": "string",
+            "example": "https://s3.amazonaws.com/assets.cms.dev.nuxverse.com/images/teste-thumbnail.png?Content-Type=image%2Fpng&X-Amz-Algorithm=AWS4-HMAC-SHA256&-Amz-Credentialb9b4ff483f39fb7dasDSADfd60e3850b0a99f5a4ca507cfe20e8SDasd101807ca63938c6999&Xe=zsdxsb83f39fb7dfd60e3850b0a99f5a4ca507cfe20e8101807ca63938c6999&X-Amz-SignedHeaders=host%3Bx-amz-acl&x-amz-acl=publi-read"
+          }
+        }
+      },
+      "S3UrlResponse2": {
+        "type": "object",
+        "properties": {
+          "url-asset": {
+            "type": "string",
+            "example": "https://s3.amazonaws.com/assets.cms.dev.nuxverse.com/images/teste.png?Content-Type=image%2Fpng&X-Amz-Algorithm=AWS4-HMAC-SHA256&-Amz-Credentialb9b4ff483f39fb7dasDSADfd60e3850b0a99f5a4ca507cfe20e8SDasd101807ca63938c6999&Xe=zsdxsb83f39fb7dfd60e3850b0a99f5a4ca507cfe20e8101807ca63938c6999&X-Amz-SignedHeaders=host%3Bx-amz-acl&x-amz-acl=publi-read"
+          },
+          "url-image": {
+            "type": "string",
+            "example": "https://s3.amazonaws.com/assets.cms.dev.nuxverse.com/images/teste.png?Content-Type=image%2Fpng&X-Amz-Algorithm=AWS4-HMAC-SHA256&-Amz-Credentialb9b4ff483f39fb7dasDSADfd60e3850b0a99f5a4ca507cfe20e8SDasd101807ca63938c6999&Xe=zsdxsb83f39fb7dfd60e3850b0a99f5a4ca507cfe20e8101807ca63938c6999&X-Amz-SignedHeaders=host%3Bx-amz-acl&x-amz-acl=publi-read"
+          },
+          "url-thumbnail": {
+            "type": "string",
+            "example": "https://s3.amazonaws.com/assets.cms.dev.nuxverse.com/images/teste-thumbnail.png?Content-Type=image%2Fpng&X-Amz-Algorithm=AWS4-HMAC-SHA256&-Amz-Credentialb9b4ff483f39fb7dasDSADfd60e3850b0a99f5a4ca507cfe20e8SDasd101807ca63938c6999&Xe=zsdxsb83f39fb7dfd60e3850b0a99f5a4ca507cfe20e8101807ca63938c6999&X-Amz-SignedHeaders=host%3Bx-amz-acl&x-amz-acl=publi-read"
+          }
+        }
+      },
+      "EventPostResponse": {
+        "type": "object",
+        "properties": {
+          "event": {
+            "$ref": "#/components/schemas/EventPostResponse_event"
+          }
+        }
+      },
+      "WorldPostBody": {
+        "required": [
+          "endDate",
+          "minAge",
+          "name",
+          "private",
+          "startDate"
+        ],
+        "type": "object",
+        "properties": {
+          "eventId": {
+            "type": "string",
+            "example": "8245029042131814"
+          },
+          "name": {
+            "type": "string",
+            "example": "John Wick - World"
+          },
+          "startDate": {
+            "type": "string",
+            "example": "1680375609000"
+          },
+          "endDate": {
+            "type": "string",
+            "example": "1680375609000"
+          },
+          "minAge": {
+            "type": "integer",
+            "example": 18
+          },
+          "private": {
+            "type": "boolean",
+            "example": true
+          }
+        }
+      },
+      "WorldPutBody": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "John Wick - World"
+          },
+          "startDate": {
+            "type": "string",
+            "example": "1680375609000"
+          },
+          "endDate": {
+            "type": "string",
+            "example": "1680375609000"
+          },
+          "minAge": {
+            "type": "integer",
+            "example": 18
+          },
+          "private": {
+            "type": "boolean",
+            "example": true
+          }
+        }
+      },
+      "WorldResponse": {
+        "type": "object",
+        "properties": {
+          "world": {
+            "$ref": "#/components/schemas/WorldResponse_world"
+          }
+        }
+      },
+      "PropsPostBody": {
+        "required": [
+          "name",
+          "ueIdentifier",
+          "worldId"
+        ],
+        "type": "object",
+        "properties": {
+          "worldId": {
+            "type": "string",
+            "example": "8518817337982296"
+          },
+          "ueIdentifier": {
+            "type": "string",
+            "example": "unique_id_2"
+          },
+          "name": {
+            "type": "string",
+            "example": "Dragon"
+          },
+          "previewImage": {
+            "type": "string",
+            "example": "https://picsum.photos/id/237/200/300"
+          },
+          "position": {
+            "type": "string",
+            "example": "[0,0,0]"
+          },
+          "rotation": {
+            "type": "string",
+            "example": "[0,0,0]"
+          },
+          "size": {
+            "type": "string",
+            "example": "[1,1,1]"
+          },
+          "assetUrl": {
+            "type": "string",
+            "example": "https://awesomesaucelabs.github.io/piglet-webgl-demo/StreamingAssets/dragon_celebration_etc1s_draco.glb"
+          },
+          "mediaType": {
+            "type": "string",
+            "example": "GLTP"
+          }
+        }
+      },
+      "PropsPutBody": {
+        "type": "object",
+        "properties": {
+          "worldId": {
+            "type": "string",
+            "example": "8518817337982296"
+          },
+          "ueIdentifier": {
+            "type": "string",
+            "example": "unique_id_2"
+          },
+          "name": {
+            "type": "string",
+            "example": "Dragon"
+          },
+          "previewImage": {
+            "type": "string",
+            "example": "https://picsum.photos/id/237/200/300"
+          },
+          "position": {
+            "type": "string",
+            "example": "[0,0,0]"
+          },
+          "rotation": {
+            "type": "string",
+            "example": "[0,0,0]"
+          },
+          "size": {
+            "type": "string",
+            "example": "[1,1,1]"
+          },
+          "assetUrl": {
+            "type": "string",
+            "example": "https://awesomesaucelabs.github.io/piglet-webgl-demo/StreamingAssets/dragon_celebration_etc1s_draco.glb"
+          },
+          "mediaType": {
+            "type": "string",
+            "example": "GLTP"
+          }
+        }
+      },
+      "PropsResponse": {
+        "type": "object",
+        "properties": {
+          "prop": {
+            "$ref": "#/components/schemas/PropsResponse_prop"
+          }
+        }
+      },
+      "GuestsPostBody": {
+        "required": [
+          "name",
+          "ueIdentifier",
+          "worldId"
+        ],
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string",
+            "example": "1746402902921115"
+          },
+          "eventId": {
+            "type": "string",
+            "example": "1503270393793171"
+          },
+          "worldId": {
+            "type": "string",
+            "example": "8518817337982296"
+          },
+          "role": {
+            "type": "string",
+            "example": "ADMIN"
+          }
+        }
+      },
+      "GuestsPutBody": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string",
+            "example": "1746402902921115"
+          },
+          "eventId": {
+            "type": "string",
+            "example": "1503270393793171"
+          },
+          "worldId": {
+            "type": "string",
+            "example": "8518817337982296"
+          },
+          "role": {
+            "type": "string",
+            "example": "ADMIN"
+          }
+        }
+      },
+      "GuestsResponse": {
+        "type": "object",
+        "properties": {
+          "guest": {
+            "$ref": "#/components/schemas/GuestsResponse_guest"
+          }
+        }
+      },
+      "EventsSubscribedResponse": {
+        "type": "object",
+        "properties": {
+          "events": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EventsSubscribedResponse_events"
+            }
+          }
+        }
+      },
+      "EventsListResponse": {
+        "type": "object",
+        "properties": {
+          "events": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EventsListResponse_events"
+            }
+          }
+        }
+      },
+      "WorldsListResponse": {
+        "type": "object",
+        "properties": {
+          "worlds": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WorldResponse"
+            }
+          }
+        }
+      },
+      "PropsListResponse": {
+        "type": "object",
+        "properties": {
+          "props": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PropsResponse"
+            }
+          }
+        }
+      },
+      "GuestsListResponse": {
+        "type": "object",
+        "properties": {
+          "guests": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GuestsResponse"
+            }
+          }
+        }
+      },
+      "DeleteResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "success"
+          }
+        }
+      },
+      "inline_response_200": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "$ref": "#/components/schemas/UserResponse"
+          }
+        }
+      },
+      "inline_response_200_1": {
+        "type": "object",
+        "properties": {
+          "userInEvent": {
+            "type": "boolean",
+            "example": true
+          }
+        }
+      },
+      "UserResponse_info": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "d290f1ee-6c54-4b01-90e6-d701748f0851"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "jonhwick@gmail.com"
+          },
+          "firstName": {
+            "type": "string",
+            "example": "John"
+          },
+          "lastName": {
+            "type": "string",
+            "example": "Wick"
+          },
+          "profileImage": {
+            "type": "string",
+            "example": "https://picsum.photos/id/237/200/300"
+          },
+          "role": {
+            "type": "string",
+            "example": "ADMIN"
+          },
+          "avatar": {
+            "type": "string",
+            "example": "https://realplayerme/id/237/200/300"
+          },
+          "avatarType": {
+            "type": "string",
+            "example": "RPM"
+          }
+        }
+      },
+      "UserListResponse_users": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "$ref": "#/components/schemas/UserResponse_info"
+          }
+        }
+      },
+      "EventPostResponse_event_info": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "8245029042131814"
+          },
+          "friendlyId": {
+            "type": "string",
+            "example": "jsonwickevent"
+          },
+          "name": {
+            "type": "string",
+            "example": "John Wick - Event"
+          },
+          "startDate": {
+            "type": "number",
+            "example": 1680375609000
+          },
+          "endDate": {
+            "type": "number",
+            "example": 1680375609000
+          },
+          "minAge": {
+            "type": "integer",
+            "example": 18
+          },
+          "private": {
+            "type": "boolean",
+            "example": true
+          },
+          "createdAt": {
+            "type": "number",
+            "example": 1680375609000
+          },
+          "updatedAt": {
+            "type": "number",
+            "example": 1680375609000
+          }
+        }
+      },
+      "EventPostResponse_event": {
+        "type": "object",
+        "properties": {
+          "info": {
+            "$ref": "#/components/schemas/EventPostResponse_event_info"
+          }
+        }
+      },
+      "WorldResponse_world_info": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "8245029042131814"
+          },
+          "eventId": {
+            "type": "string",
+            "example": "8245029042131814"
+          },
+          "friendlyId": {
+            "type": "string",
+            "example": "jsonwickworld"
+          },
+          "name": {
+            "type": "string",
+            "example": "John Wick - World"
+          },
+          "startDate": {
+            "type": "number",
+            "example": 1680375609000
+          },
+          "endDate": {
+            "type": "number",
+            "example": 1680375609000
+          },
+          "minAge": {
+            "type": "integer",
+            "example": 18
+          },
+          "private": {
+            "type": "boolean",
+            "example": true
+          },
+          "createdAt": {
+            "type": "number",
+            "example": 1680375609000
+          },
+          "updatedAt": {
+            "type": "number",
+            "example": 1680375609000
+          }
+        }
+      },
+      "WorldResponse_world": {
+        "type": "object",
+        "properties": {
+          "info": {
+            "$ref": "#/components/schemas/WorldResponse_world_info"
+          }
+        }
+      },
+      "PropsResponse_prop_info": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "8245029042131814"
+          },
+          "worldId": {
+            "type": "string",
+            "example": "8518817337982296"
+          },
+          "ueIdentifier": {
+            "type": "string",
+            "example": "unique_id_2"
+          },
+          "name": {
+            "type": "string",
+            "example": "Dragon"
+          },
+          "previewImage": {
+            "type": "string",
+            "example": "https://picsum.photos/id/237/200/300"
+          },
+          "position": {
+            "type": "string",
+            "example": "[0,0,0]"
+          },
+          "rotation": {
+            "type": "string",
+            "example": "[0,0,0]"
+          },
+          "size": {
+            "type": "string",
+            "example": "[1,1,1]"
+          },
+          "assetUrl": {
+            "type": "string",
+            "example": "https://awesomesaucelabs.github.io/piglet-webgl-demo/StreamingAssets/dragon_celebration_etc1s_draco.glb"
+          },
+          "mediaType": {
+            "type": "string",
+            "example": "GLTP"
+          },
+          "createdAt": {
+            "type": "number",
+            "example": 1680375609000
+          },
+          "updatedAt": {
+            "type": "number",
+            "example": 1680375609000
+          }
+        }
+      },
+      "PropsResponse_prop": {
+        "type": "object",
+        "properties": {
+          "info": {
+            "$ref": "#/components/schemas/PropsResponse_prop_info"
+          }
+        }
+      },
+      "GuestsResponse_guest_info": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "8245029042131814"
+          },
+          "userId": {
+            "type": "string",
+            "example": "1746402902921115"
+          },
+          "eventId": {
+            "type": "string",
+            "example": "1503270393793171"
+          },
+          "worldId": {
+            "type": "string",
+            "example": "8518817337982296"
+          },
+          "role": {
+            "type": "string",
+            "example": "ADMIN"
+          },
+          "createdAt": {
+            "type": "number",
+            "example": 1680375609000
+          },
+          "updatedAt": {
+            "type": "number",
+            "example": 1680375609000
+          }
+        }
+      },
+      "GuestsResponse_guest": {
+        "type": "object",
+        "properties": {
+          "info": {
+            "$ref": "#/components/schemas/GuestsResponse_guest_info"
+          }
+        }
+      },
+      "EventsSubscribedResponse_info": {
+        "type": "object",
+        "properties": {
+          "private": {
+            "type": "boolean",
+            "example": true
+          },
+          "endDate": {
+            "type": "number"
+          },
+          "updatedAt": {
+            "type": "string",
+            "example": "2023-04-01T19:43:34.754Z"
+          },
+          "startDate": {
+            "type": "number",
+            "example": 1680375609000
+          },
+          "createdAt": {
+            "type": "string",
+            "example": "2023-04-01T19:43:34.754Z"
+          },
+          "id": {
+            "type": "string",
+            "example": "1503270393793171"
+          },
+          "name": {
+            "type": "string",
+            "example": "Disney World 2023"
+          },
+          "minAge": {
+            "type": "integer",
+            "example": 18
+          }
+        }
+      },
+      "EventsSubscribedResponse_admins": {
+        "type": "object",
+        "properties": {
+          "avatar": {
+            "type": "string",
+            "example": ""
+          },
+          "lastName": {
+            "type": "string",
+            "example": "Wick"
+          },
+          "avatarType": {
+            "type": "string",
+            "example": ""
+          },
+          "email": {
+            "type": "string",
+            "example": "johnwick@gmail.com"
+          },
+          "id": {
+            "type": "string",
+            "example": "6871308825489770"
+          },
+          "firstName": {
+            "type": "string",
+            "example": "John"
+          },
+          "profileImage": {
+            "type": "string",
+            "example": ""
+          },
+          "role": {
+            "type": "string",
+            "example": "MASTER"
+          }
+        }
+      },
+      "EventsSubscribedResponse_props": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "4570886303663058"
+          },
+          "worldId": {
+            "type": "string",
+            "example": "8518817337982296"
+          },
+          "name": {
+            "type": "string",
+            "example": "Raposa"
+          },
+          "ueIdentifier": {
+            "type": "string",
+            "example": "unique_id_1"
+          },
+          "mediaType": {
+            "type": "string",
+            "example": "GLTF"
+          },
+          "previewImage": {
+            "type": "string",
+            "example": "https://picsum.photos/id/237/200/300"
+          },
+          "assetUrl": {
+            "type": "string",
+            "example": "https://awesomesaucelabs.github.io/piglet-webgl-demo/StreamingAssets/dragon_celebration_etc1s_draco.glb"
+          },
+          "createdAt": {
+            "type": "string",
+            "example": "2023-04-02T18:48:41.135Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "example": "2023-04-02T18:48:41.135Z"
+          },
+          "position": {
+            "type": "string",
+            "example": "[0,0,0]"
+          },
+          "size": {
+            "type": "string",
+            "example": "[1,1,1]"
+          },
+          "rotation": {
+            "type": "string",
+            "example": "[0,0,0]"
+          }
+        }
+      },
+      "EventsSubscribedResponse_worlds": {
+        "type": "object",
+        "properties": {
+          "info": {
+            "$ref": "#/components/schemas/EventsSubscribedResponse_info"
+          },
+          "admins": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EventsSubscribedResponse_admins"
+            }
+          },
+          "players": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EventsSubscribedResponse_admins"
+            }
+          },
+          "props": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EventsSubscribedResponse_props"
+            }
+          }
+        }
+      },
+      "EventsSubscribedResponse_events": {
+        "type": "object",
+        "properties": {
+          "info": {
+            "$ref": "#/components/schemas/EventsSubscribedResponse_info"
+          },
+          "admins": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EventsSubscribedResponse_admins"
+            }
+          },
+          "players": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EventsSubscribedResponse_admins"
+            }
+          },
+          "worlds": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EventsSubscribedResponse_worlds"
+            }
+          }
+        }
+      },
+      "EventsListResponse_event": {
+        "type": "object",
+        "properties": {
+          "private": {
+            "type": "boolean",
+            "example": true
+          },
+          "end-Date": {
+            "type": "number",
+            "example": 1680375609000
+          },
+          "updatedAt": {
+            "type": "string",
+            "example": "2023-04-01T19:43:34.754Z"
+          },
+          "startDate": {
+            "type": "number",
+            "example": 1680375609000
+          },
+          "createdAt": {
+            "type": "string",
+            "example": "2023-04-01T19:43:34.754Z"
+          },
+          "id": {
+            "type": "string",
+            "example": "1503270393793171"
+          },
+          "name": {
+            "type": "string",
+            "example": "Disney World 2023"
+          },
+          "minAge": {
+            "type": "integer",
+            "example": 18
+          }
+        }
+      },
+      "EventsListResponse_events": {
+        "type": "object",
+        "properties": {
+          "event": {
+            "$ref": "#/components/schemas/EventsListResponse_event"
+          }
+        }
+      }
+    },
+    "examples": {
+      "WorldsHasProps": {
+        "value": {
+          "error": "World has Props"
+        }
+      },
+      "EventHasWorlds": {
+        "value": {
+          "error": "Event has Worlds"
+        }
+      },
+      "EventsHasGuests": {
+        "value": {
+          "error": "Events has Guests"
+        }
+      },
+      "RecordNotFound": {
+        "value": {
+          "error": "Record not Found"
+        }
+      },
+      "PreSignedImage": {
+        "value": {
+          "url-image": "https://s3.amazonaws.com/assets.cms.dev.nuxverse.com/users/001172620833001/events/111111111111/worlds/222222222222/assets/images/8846232b-629e-4aab-8743-1f2ad76e2e0c-imageName3.png?Content-Type=image%2Fpng&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=eretwgrew%2F20230501%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20230501T151309Z&X-Amz-Expires=86400&X-Amz-Security-",
+          "url-thumbnail": "https://s3.amazonaws.com/assets.cms.dev.nuxverse.com/users/001172620833001/events/111111111111/worlds/222222222222/assets/images/8846232b-629e-4aab-8743-1f2ad76e2e0c-imageName3.png?Content-Type=image%2Fpng&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=dstetre%2F20230501%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20230501T151309Z&X-Amz-Expires=86400&X-Amz-Security-"
+        }
+      },
+      "PreSignedVideo": {
+        "value": {
+          "url-image": "https://s3.amazonaws.com/assets.cms.dev.nuxverse.com/users/001172620833001/events/111111111111/worlds/222222222222/assets/videos/8846232b-629e-4aab-8743-1f2ad76e2e0c-disney.mp4?Content-Type=image%2Fpng&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=eretwgrew%2F20230501%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20230501T151309Z&X-Amz-Expires=86400&X-Amz-Security-",
+          "url-thumbnail": "https://s3.amazonaws.com/assets.cms.dev.nuxverse.com/users/001172620833001/events/111111111111/worlds/222222222222/assets/images/8846232b-629e-4aab-8743-1f2ad76e2e0c-imageName3.png?Content-Type=image%2Fpng&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=dstetre%2F20230501%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20230501T151309Z&X-Amz-Expires=86400&X-Amz-Security-"
+        }
+      },
+      "PreSignedOthers": {
+        "value": {
+          "url-asset": "https://s3.amazonaws.com/assets.cms.dev.nuxverse.com/users/001172620833001/events/111111111111/worlds/222222222222/assets/others/8846232b-629e-4aab-8743-1f2ad76e2e0c-disney.pdf?Content-Type=image%2Fpng&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=eretwgrew%2F20230501%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20230501T151309Z&X-Amz-Expires=86400&X-Amz-Security-",
+          "url-image": "https://s3.amazonaws.com/assets.cms.dev.nuxverse.com/users/001172620833001/events/111111111111/worlds/222222222222/assets/images/8846232b-629e-4aab-8743-1f2ad76e2e0c-disney-img.png?Content-Type=image%2Fpng&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=eretwgrew%2F20230501%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20230501T151309Z&X-Amz-Expires=86400&X-Amz-Security-",
+          "url-thumbnail": "https://s3.amazonaws.com/assets.cms.dev.nuxverse.com/users/001172620833001/events/111111111111/worlds/222222222222/assets/images/8846232b-629e-4aab-8743-1f2ad76e2e0c-imageName3-thumbnail.png?Content-Type=image%2Fpng&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=dstetre%2F20230501%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20230501T151309Z&X-Amz-Expires=86400&X-Amz-Security-"
+        }
+      }
+    },
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
