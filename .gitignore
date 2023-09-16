@@ -7,3 +7,4 @@ node_modules
 .env.local
 .terraform
 anr_api
+anr_console
