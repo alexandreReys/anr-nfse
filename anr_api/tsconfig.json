@@ -15,6 +15,7 @@
   "include": [
     "micro-services/main/src/**/*.ts",
     "micro-services/main/src/**/*.js",
+    "micro-services/main/src/types/**/*",
   ],
   "exclude": [
     "node_modules"
