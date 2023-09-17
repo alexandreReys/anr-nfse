@@ -5,6 +5,8 @@ const morgan = require('morgan');
 const utils = require('./utils');
 const { ErrorsMapped } = require('./config/errors-mapped');
 
+import allRouter from './routes/all';
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
@@ -13,7 +15,7 @@ app.use(morgan('dev'));
 // =============================================================
 // ALL ROUTES
 // =============================================================
-app.use(require('./routes/all'));
+app.use(allRouter);
 
 // =============================================================
 // ENDPOINT NOT FOUND
