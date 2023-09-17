@@ -21,7 +21,7 @@ async function canRegister(req, origin) {
     };
 
     if ( origin === 'SocialLogin' ) {
-      error = utils.checkRequiredFields(req.body, ['wixId', 'email', 'firstName', 'lastName']);
+      error = utils.checkRequiredFields(req.body, ['email', 'firstName', 'lastName']);
       if (error) return error;
     };
 
@@ -62,7 +62,7 @@ async function canSocialLogin(req) {
     //  CHECK FIELDS
     ////////////////////////////////////////////////////////////////////////
 
-    error = utils.checkRequiredFields(req.body, ['wixId', 'email', 'firstName', 'lastName']);
+    error = utils.checkRequiredFields(req.body, ['email', 'firstName', 'lastName']);
     if (error) return error;
 
   } catch (error) {
