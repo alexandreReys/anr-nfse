@@ -34,7 +34,6 @@ export default function Home() {
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">Sign in to your account</h2>
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit(handleSignIn)}>
-          <input type="hidden" name="remember" defaultValue="true" />
           <div className="rounded-md shadow-sm -space-y-px">
             <div>
               <label htmlFor="email-address" className="sr-only">
@@ -77,15 +76,17 @@ export default function Home() {
                 className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
               />
               <label htmlFor="remember_me" className="ml-2 block text-sm text-gray-900">
-                Remember me
+                Lembrar
               </label>
             </div>
 
             <div className="text-sm">
               <a href="#" className="font-medium text-indigo-600 hover:text-indigo-500">
-                Forgot your password?
+                Esqueceu sua senha?
               </a>
             </div>
+            <input type="hidden" name="remember" defaultValue="true" />
+
           </div>
 
           <div>
