@@ -25,7 +25,11 @@ export function AuthProvider({ children }: ChildrenProps) {
   }, []);
 
   async function signIn({ email, password }: SignInData) {
-    const { token, user } = await signInRequest({ email, password });
+    const response = await signInRequest({ email, password });
+
+    if (!response) return;
+
+    const { token, user } = response;
 
     setCookie(undefined, 'nextauth.token', token, {
       maxAge: 60 * 60 * 1, // 1 hour
