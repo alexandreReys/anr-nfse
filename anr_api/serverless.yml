@@ -1,4 +1,4 @@
-service: serverless-api
+service: anr-api
 frameworkVersion: '3'
 useDotenv: true
 
@@ -19,16 +19,16 @@ custom:
     watch:
       - micro-services/main/src/**/*.ts
       - micro-services/main/src/**/*.js
-  customDomain:
-    domainName: ${env:DOMAIN}
-    basePath: ''
-    stage: ${self:provider.stage}
-    createRoute53Record: true
+  # customDomain:
+  #   domainName: ${env:DOMAIN}
+  #   basePath: ''
+  #   stage: ${self:provider.stage}
+  #   createRoute53Record: true
 
 plugins:
   - serverless-plugin-typescript
   - serverless-offline
-  - serverless-domain-manager
+  # - serverless-domain-manager
   - serverless-dotenv-plugin
 
 functions:
