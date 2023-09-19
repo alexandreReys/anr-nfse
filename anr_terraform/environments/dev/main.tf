@@ -18,3 +18,12 @@ module "sellers" {
   write_capacity = 1
   read_capacity  = 1
 }
+
+resource "aws_s3_bucket" "serverless_deployment_bucket" {
+  bucket = "serverless.cms.dev.anr.com"
+
+  tags = {
+    Name        = "serverless.cms.dev.anr.com"
+    Environment = "dev"
+  }
+}
