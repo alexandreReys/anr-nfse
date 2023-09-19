@@ -71,9 +71,9 @@ export const getTokenData = (req: Request) => {
 export const removeUserTests = async () => {
   const users = await Users.scan('email').eq('test@test.com').exec();
   if (users.length > 0) {
-    let idsToDelete = [];
+    let idsToDelete:any[] = [];
     users.forEach((user) => idsToDelete.push(user.id));
     console.log('Removing Users Tests:', idsToDelete);
-    await Users.batchDelete(idsToDelete);
+    (await Users as any).batchDelete(idsToDelete);
   }
 }
