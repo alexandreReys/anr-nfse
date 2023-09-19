@@ -1,4 +1,6 @@
 import axios from 'axios';
+import { showSnackbarError } from '@/components/snackbar';
+
 
 const delay = (amount = 750) => new Promise( resolve => setTimeout(resolve, amount));
 
@@ -8,8 +10,13 @@ type SignInRequestData = {
 };
 
 export async function signInRequest(data: SignInRequestData) {
-  const response = await axios.post('http://localhost:3000/auth/v1/login', data);
-  return response.data;
+  try {
+    const response = await axios.post('http://localhost:3000/auth/v1/login', data);
+    return response.data;
+  } catch (error) {
+    showSnackbarError('Credenciais invalidas !!');
+    return null;
+  }
 }
 
 // export async function recoverUserInformation() {
