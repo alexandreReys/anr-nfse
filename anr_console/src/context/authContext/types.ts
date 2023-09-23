@@ -1,8 +1,10 @@
 export type User = {
   email: string;
-  name: string;
+  firstName: string;
+  lastName: string;
+  profileImgUrl: string;
+  role: string;
   password: string;
-  avatar_url: string;
 };
 
 export type SignInData = {

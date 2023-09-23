@@ -29,9 +29,11 @@ export async function recoverUserInformation() {
 
   return {
     user: {
-      name: 'Alexandre Nunes Reys',
       email: 'anr.alexandre@gmail.com',
-      avatar_url: 'https://github.com/alexandreReys.png',
+      firstName: 'Alexandre',
+      lastName: 'Reys',
+      profileImgUrl: 'https://github.com/alexandreReys.png',
+      role: '',
       password: '',
     }
   }
@@ -55,7 +57,7 @@ export async function recoverUserInformation() {
 //     user: {
 //       name: 'Alexandre Nunes Reys',
 //       email: 'anr.alexandre@gmail.com',
-//       avatar_url: 'https://github.com/alexandreReys.png',
+//       profileImgUrl: 'https://github.com/alexandreReys.png',
 //       password: '',
 //     }
 //   }
@@ -68,7 +70,7 @@ export async function recoverUserInformation() {
 //     user: {
 //       name: 'Alexandre Nunes Reys',
 //       email: 'anr.alexandre@gmail.com',
-//       avatar_url: 'https://github.com/alexandreReys.png',
+//       profileImgUrl: 'https://github.com/alexandreReys.png',
 //       password: '',
 //     }
 //   }
