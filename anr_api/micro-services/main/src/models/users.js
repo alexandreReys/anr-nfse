@@ -11,14 +11,6 @@ const UsersSchema = new dynamoose.Schema(
       global: true,
       default: uuid.v4,
     },
-    wixId: {
-      type: String,
-      index: {
-        name: `${process.env.PROJECT_ENVIRONMENT}-${tableName}-wixId-gsi`,
-        global: true,
-        default: '',
-      },
-    },
     email: {
       type: String,
       index: {
@@ -39,17 +31,9 @@ const UsersSchema = new dynamoose.Schema(
       type: String,
       default: '',
     },
-    profileImage: {
+    profileImgUrl: {
       type: String,
       default: defaultData.getDefaultImage,
-    },
-    avatar: {
-      type: String,
-      default: '',
-    },
-    avatarType: {
-      type: String,
-      default: '',
     },
     role: {
       type: String,
