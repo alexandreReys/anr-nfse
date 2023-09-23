@@ -9,7 +9,7 @@ resource "aws_dynamodb_table" "users" {
   }
 
   attribute {
-    name = "companyName"
+    name = "companyId"
     type = "S"
   }
 
@@ -19,9 +19,9 @@ resource "aws_dynamodb_table" "users" {
   }
 
   global_secondary_index {
-    name            = "${var.environment}-users-companyName-gsi"
+    name            = "${var.environment}-users-companyId-gsi"
     projection_type = "ALL"
-    hash_key        = "companyName"
+    hash_key        = "companyId"
     write_capacity  = var.write_capacity
     read_capacity   = var.read_capacity
   }
