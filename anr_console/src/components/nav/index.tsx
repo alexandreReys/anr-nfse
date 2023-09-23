@@ -16,7 +16,7 @@ export default function Nav() {
   const { user } = useContext(AuthContext);
 
   const DropdownMotoristas = () => {
-    return(
+    return (
       <Menu as="div" className="relative inline-block text-left">
         <div>
           <Menu.Button className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
@@ -54,7 +54,7 @@ export default function Nav() {
   }
 
   const DropdownVeiculos = () => {
-    return(
+    return (
       <Menu as="div" className="relative inline-block text-left">
         <div>
           <Menu.Button className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
@@ -92,45 +92,45 @@ export default function Nav() {
   }
 
   const DropdownCargas = () => {
-    return(
+    return (
       <Menu as="div" className="relative inline-block text-left">
-      <div>
-        <Menu.Button className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
-          Cargas
-        </Menu.Button>
-      </div>
-      <Transition
-        as={Fragment}
-        enter="transition ease-out duration-100"
-        enterFrom="transform opacity-0 scale-95"
-        enterTo="transform opacity-100 scale-100"
-        leave="transition ease-in duration-75"
-        leaveFrom="transform opacity-100 scale-100"
-        leaveTo="transform opacity-0 scale-95"
-      >
-        <Menu.Items className="origin-top-right absolute left-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
-          <Menu.Item>
-            <Link href="/Cargas">
-              <span className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer">
-                Incluir
-              </span>
-            </Link>
-          </Menu.Item>
-          <Menu.Item>
-            <Link href="/CargasLista">
-              <span className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer">
-                Cadastro
-              </span>
-            </Link>
-          </Menu.Item>
-        </Menu.Items>
-      </Transition>
-    </Menu>
+        <div>
+          <Menu.Button className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
+            Cargas
+          </Menu.Button>
+        </div>
+        <Transition
+          as={Fragment}
+          enter="transition ease-out duration-100"
+          enterFrom="transform opacity-0 scale-95"
+          enterTo="transform opacity-100 scale-100"
+          leave="transition ease-in duration-75"
+          leaveFrom="transform opacity-100 scale-100"
+          leaveTo="transform opacity-0 scale-95"
+        >
+          <Menu.Items className="origin-top-right absolute left-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
+            <Menu.Item>
+              <Link href="/Cargas">
+                <span className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer">
+                  Incluir
+                </span>
+              </Link>
+            </Menu.Item>
+            <Menu.Item>
+              <Link href="/CargasLista">
+                <span className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer">
+                  Cadastro
+                </span>
+              </Link>
+            </Menu.Item>
+          </Menu.Items>
+        </Transition>
+      </Menu>
     )
   }
 
   const DropdownRelatorios = () => {
-    return(
+    return (
       <Menu as="div" className="relative inline-block text-left">
         <div>
           <Menu.Button className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
@@ -156,9 +156,11 @@ export default function Nav() {
             </Menu.Item>
           </Menu.Items>
         </Transition>
-    </Menu>
+      </Menu>
     )
   }
+
+  console.log('user:', user);
 
   return (
     <Disclosure as="nav" className="bg-gray-800">
@@ -178,18 +180,12 @@ export default function Nav() {
                 </div>
                 <div className="hidden md:block">
                   <div className="ml-10 flex items-baseline space-x-4">
-                    
+
                     <Link href="/Dashboard">
                       <span className="text-yellow-500 bg-black hover:bg-gray-900 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
-                        D A S H B O A R D
+                        ANR Sistemas
                       </span>
                     </Link>
-
-                    {/* <Link href="/Cep">
-                      <span className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
-                        Cep
-                      </span>
-                    </Link> */}
 
                     <DropdownMotoristas />
 
@@ -222,11 +218,12 @@ export default function Nav() {
                             <span className="sr-only">Open user menu</span>
                             <img
                               className="h-8 w-8 rounded-full"
-                              src={user?.avatar_url}
+                              src={user?.profileImgUrl}
                               alt=""
                             />
                           </Menu.Button>
                         </div>
+
                         <Transition
                           show={open}
                           as={Fragment}
@@ -241,6 +238,16 @@ export default function Nav() {
                             static
                             className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
                           >
+                            <Menu.Item>
+                              <div className="my-4 ml-4">
+                                <div className="text-base font-medium leading-none text-blue-800">
+                                  {user?.firstName}
+                                </div>
+                                <div className="text-sm font-medium leading-none text-gray-400 mt-2">
+                                  {user?.email}
+                                </div>
+                              </div>
+                            </Menu.Item>
                             {profile.map((item) => (
                               <Menu.Item key={item}>
                                 {({ active }) => (
@@ -295,7 +302,7 @@ export default function Nav() {
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
 
               <a href="#" className="bg-gray-900 text-white block px-3 py-2 rounded-md text-base font-medium">
-                D A S H B O A R D
+                ANR Sistemas
               </a>
 
               <p>
@@ -315,22 +322,22 @@ export default function Nav() {
               </p>
 
             </div>
-            
+
             <div className="pt-4 pb-3 border-t border-gray-700">
               <div className="flex items-center px-5">
                 <div className="flex-shrink-0">
                   <img
                     className="h-10 w-10 rounded-full"
-                    src={user?.avatar_url}
+                    src={user?.profileImgUrl}
                     alt=""
                   />
                 </div>
                 <div className="ml-3">
                   <div className="text-base font-medium leading-none text-white">
-                    Developer ANR
+                    {user?.firstName} {user?.lastName}
                   </div>
                   <div className="text-sm font-medium leading-none text-gray-400">
-                    dev@anrsistemas.com.br
+                    {user?.email}
                   </div>
                 </div>
                 <button className="ml-auto bg-gray-800 flex-shrink-0 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
