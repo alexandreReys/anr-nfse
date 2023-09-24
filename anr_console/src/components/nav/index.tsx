@@ -58,7 +58,7 @@ export default function Nav() {
       <Menu as="div" className="relative inline-block text-left">
         <div>
           <Menu.Button className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
-            Veiculos
+            Usuarios
           </Menu.Button>
         </div>
         <Transition
@@ -72,7 +72,7 @@ export default function Nav() {
         >
           <Menu.Items className="origin-top-right absolute left-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
             <Menu.Item>
-              <Link href="/Veiculos">
+              <Link href="/Users">
                 <span className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer">
                   Incluir
                 </span>
@@ -159,8 +159,6 @@ export default function Nav() {
       </Menu>
     )
   }
-
-  console.log('user:', user);
 
   return (
     <Disclosure as="nav" className="bg-gray-800">
