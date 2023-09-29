@@ -53,7 +53,7 @@ export default function Nav() {
     )
   }
 
-  const DropdownVeiculos = () => {
+  const DropdownUsers = () => {
     return (
       <Menu as="div" className="relative inline-block text-left">
         <div>
@@ -71,15 +71,15 @@ export default function Nav() {
           leaveTo="transform opacity-0 scale-95"
         >
           <Menu.Items className="origin-top-right absolute left-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
-            <Menu.Item>
-              <Link href="/Users">
+            {/* <Menu.Item>
+              <Link href="/Users/[id]">
                 <span className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer">
                   Incluir
                 </span>
               </Link>
-            </Menu.Item>
+            </Menu.Item> */}
             <Menu.Item>
-              <Link href="/VeiculosLista">
+              <Link href="/UsersList">
                 <span className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer">
                   Cadastro
                 </span>
@@ -187,7 +187,7 @@ export default function Nav() {
 
                     <DropdownMotoristas />
 
-                    <DropdownVeiculos />
+                    <DropdownUsers />
 
                     <DropdownCargas />
 
@@ -308,7 +308,7 @@ export default function Nav() {
               </p>
 
               <p>
-                <DropdownVeiculos />
+                <DropdownUsers />
               </p>
 
               <p>

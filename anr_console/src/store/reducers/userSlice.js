@@ -3,63 +3,105 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { api } from '../../services/api';
 
 const apiUrl = '/api/v1/users';
-const userId = '2440635241199184';
+// const userId = '2440635241199184';
 
-const initialState = { user: null, status: 'idle', error: null };
+const initialState = { 
+  user: null, 
+  users: [], 
+  status: 'idle', 
+  error: null 
+};
 
-export const getUsers = createAsyncThunk('users/getUsers', async () => {
+export const getUsers = createAsyncThunk('users/getUsers', async (userId) => {
   const response = await api.get(`${apiUrl}/${userId}`);
   return response.data;
 });
 
+export const listUsers = createAsyncThunk('users/listUsers', async () => {
+  const response = await api.get(`${apiUrl}/list`);
+  return response.data;
+});
+
 export const addUser = createAsyncThunk('users/addUser', async (user) => {
+  delete user.id;
   const response = await api.post(apiUrl, user);
   return response.data;
 });
 
-export const updateUser = createAsyncThunk('users/updateUser', async (user) => {
-  const response = await api.put(`${apiUrl}/${userId}`, user);
+export const updateUser = createAsyncThunk('users/updateUser', async (userData) => {
+  const userId = userData.id;
+  delete userData.id;
+  delete userData.email;
+  delete userData.password;
+  const response = await api.put(`${apiUrl}/${userId}`, userData);
   return response.data;
 });
 
 export const deleteUser = createAsyncThunk('users/deleteUser', async (userId) => {
-  await api.delete(`${apiUrl}/${userId}`);
-  return userId;
+  const response = await api.delete(`${apiUrl}/${userId}`);
+  return response.data;
 });
 
 const usersSlice = createSlice({
   name: 'users',
   initialState,
-  reducers: {},
+  reducers: {
+    setUser: (state, action) => {
+      state.user = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getUsers.pending, (state) => {
         state.status = 'loading';
       })
       .addCase(getUsers.fulfilled, (state, action) => {
-        state.status = 'succeeded';
+        state.status = 'ok';
         state.user = action.payload.user;
       })
       .addCase(getUsers.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.error.message;
       })
+
+      .addCase(listUsers.pending, (state) => {
+        state.status = 'loading';
+        state.users = [];
+      })
+      .addCase(listUsers.fulfilled, (state, action) => {
+        state.status = 'ok';
+        state.users = action.payload.users;
+      })
+      .addCase(listUsers.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.error.message;
+      })
+
       .addCase(addUser.fulfilled, (state, action) => {
-        state.user.push(action.payload);
+        // state.user.push(action.payload);
+        state.status = 'ok';
+        state.users = action.payload.users;
       })
       .addCase(updateUser.fulfilled, (state, action) => {
-        const index = state.user.findIndex(user => user.id === action.payload.id);
-        if (index !== -1) {
-          state.user[index] = action.payload;
-        }
+        // const index = state.user.findIndex(user => user.id === action.payload.id);
+        // if (index !== -1) {
+        //   state.user[index] = action.payload;
+        // }
+        state.status = 'ok';
+        state.users = action.payload.users;
       })
       .addCase(deleteUser.fulfilled, (state, action) => {
-        const index = state.user.findIndex(user => user.id === action.payload);
-        if (index !== -1) {
-          state.user.splice(index, 1);
-        }
+        // const index = state.user.findIndex(user => user.id === action.payload);
+        // if (index !== -1) {
+        //   state.user.splice(index, 1);
+        // }
+        state.status = 'ok';
+        state.users = action.payload;
       });
   },
 });
+
+export const { setUser } = usersSlice.actions;
+export const selectUser = (state) => state.users.user;
 
 export default usersSlice.reducer;

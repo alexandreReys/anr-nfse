@@ -19,6 +19,16 @@ async function canUpdate(req) {
     //  CHECK FIELDS
     ////////////////////////////////////////////////////////////////////////
 
+    if (!!req.body.email) {
+      ErrorsMapped.Custom.message = 'Changing Email is not allowed';
+      return ErrorsMapped.Custom;
+    }
+
+    if (!!req.body.password) {
+      ErrorsMapped.Custom.message = 'Changing Email is not allowed';
+      return ErrorsMapped.Custom;
+    }
+
     ////////////////////////////////////////////////////////////////////////
     //  NORMALIZATIONS
     ////////////////////////////////////////////////////////////////////////
@@ -34,16 +44,7 @@ async function canUpdate(req) {
     //  VALIDATIONS
     ////////////////////////////////////////////////////////////////////////
 
-    if (
-      req.body.wixId !== undefined &&
-      req.body.wixId !== user.wixId
-    ) {
-      let users = await Users
-        .query('wixId').eq(req.body.wixId)
-        .exec();
-      if (users.length > 0) return ErrorsMapped.RecordAlreadyExists;
-    }
-
+    return null;
   } catch (error) {
     ErrorsMapped.Custom.message = error;
     return ErrorsMapped.Custom;
@@ -58,22 +59,34 @@ async function canDelete(req) {
     if (user === undefined || !user) {
       return ErrorsMapped.RecordNotExist;
     }
+    return null;
   } catch (error) {
     ErrorsMapped.Custom.message = error;
     return ErrorsMapped.Custom;
   }
-
-  return null;
 }
 
 ////////////////////////////////////////////////////////////////////////
 //  ENDPOINTS
 ////////////////////////////////////////////////////////////////////////
 
+export const create = async (req, res, next) => {
+  try {
+    delete req.body.id
+
+    const user = await Users.create(req.body);
+
+    delete user.password
+
+    return res.json(user);  
+  } catch (error) {
+    ErrorsMapped.Custom.message = error;
+    return utils.sendError(ErrorsMapped.Custom, next);
+  }
+};
+
 export const update = async (req, res, next) => {
   try {
-    // req.body.user = utils.getUser(req);
-
     const error = await canUpdate(req);
     if (error) {
       return utils.sendError(error, next);
@@ -88,13 +101,9 @@ export const update = async (req, res, next) => {
       req.body
     );
 
-    let response = { user };
+    delete user.password
 
-    if (req.version === 'v2') {
-      response = { user: { info: user } }
-    }
-    
-    return res.json(response);  
+    return res.json(user);  
   } catch (error) {
     ErrorsMapped.Custom.message = error;
     return utils.sendError(ErrorsMapped.Custom, next);
@@ -103,8 +112,6 @@ export const update = async (req, res, next) => {
 
 export const remove = async (req, res, next) => {
   try {
-    // req.body.user = utils.getUser(req);
-
     const error = await canDelete(req);
     if (error) {
       return utils.sendError(error, next);
@@ -123,9 +130,7 @@ export const listAll = async (req, res, next) => {
   try {
     // req.body.user = utils.getUser(req);
 
-    const users = await Users.scan()
-      .attributes(["id","firstName","lastName","email","avatarType","avatar","profileImage","wixId","role"])
-      .exec();
+    const users = await Users.scan().exec();
 
     let response = { users };
 
