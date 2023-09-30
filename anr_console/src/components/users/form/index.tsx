@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
-import Head from 'next/head'
-import Nav from '@/components/nav'
+import { useRouter } from 'next/router';
 import { useUsers } from './useUsers';
 import { useSelector } from 'react-redux';
 import { selectUser } from '@/store/reducers/userSlice';
+import { ShowProcessingCallback } from '@/components/snackbar';
 
 export default function Users() {
+  const router = useRouter();
   const user = useSelector(selectUser);
 
   const {
@@ -30,6 +31,10 @@ export default function Users() {
     }
   }, [user, setValue]);
 
+  const handleCancel = () => {
+    router.push('/UsersList');
+  }
+
   const Header = () => (
     <header className="bg-white shadow">
       <div className="max-w-7xl mx-auto pt-4 pb-1 px-4 sm:px-6 lg:px-8">
@@ -41,7 +46,7 @@ export default function Users() {
   const Id = () => (
     <>
       <div className="max-w-7xl mx-auto pt-4 pb-1">
-        <p className="text-lg3xl font-bold text-gray-600">Id: {user && user.id}</p>
+        <p className="text-lg3xl font-bold text-gray-600">{user && user.id ? `ID :  ${user.id}` : 'Incluindo ...'}</p>
       </div>
       <hr className="border-b-2 border-gray-300 w-full mt-3 mb-4" />
     </>
@@ -49,11 +54,6 @@ export default function Users() {
 
   return (
     <>
-      <Head>
-        <title>Lista de Usuários</title>
-      </Head>
-      <Nav />
-      <Header />
       <main className="mx-auto">
         <div className="max-w-7xl mx-auto pb-6 pt-2 px-4 sm:px-6 lg:px-8">
           <Id />
@@ -84,9 +84,14 @@ export default function Users() {
               </div>
             </div>
 
-            <button type="submit" className={buttonStyles}>
-              Salvar
-            </button>
+            <div className='flex justify-between mx-2'>
+              <button type="button" className={buttonStyles} onClick={handleCancel}>
+                Cancelar
+              </button>
+              <button type="submit" className={buttonStyles}>
+                Salvar
+              </button>
+            </div>
 
           </form>
         </div>

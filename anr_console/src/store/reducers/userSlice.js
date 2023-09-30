@@ -31,7 +31,6 @@ export const addUser = createAsyncThunk('users/addUser', async (user) => {
 export const updateUser = createAsyncThunk('users/updateUser', async (userData) => {
   const userId = userData.id;
   delete userData.id;
-  delete userData.email;
   delete userData.password;
   const response = await api.put(`${apiUrl}/${userId}`, userData);
   return response.data;
@@ -78,23 +77,14 @@ const usersSlice = createSlice({
       })
 
       .addCase(addUser.fulfilled, (state, action) => {
-        // state.user.push(action.payload);
         state.status = 'ok';
         state.users = action.payload.users;
       })
       .addCase(updateUser.fulfilled, (state, action) => {
-        // const index = state.user.findIndex(user => user.id === action.payload.id);
-        // if (index !== -1) {
-        //   state.user[index] = action.payload;
-        // }
         state.status = 'ok';
         state.users = action.payload.users;
       })
       .addCase(deleteUser.fulfilled, (state, action) => {
-        // const index = state.user.findIndex(user => user.id === action.payload);
-        // if (index !== -1) {
-        //   state.user.splice(index, 1);
-        // }
         state.status = 'ok';
         state.users = action.payload;
       });

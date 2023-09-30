@@ -2,7 +2,7 @@ import Head from 'next/head'
 import { parseCookies } from 'nookies'
 import { GetServerSideProps } from 'next'
 import { getAPIClient } from '../services/axios'
-import UsersList from '../components/users/list_crud'
+import UsersList from '../components/users/list'
 import Nav from '@/components/nav'
 
 export default function Projects() {

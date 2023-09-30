@@ -19,13 +19,13 @@ async function canUpdate(req) {
     //  CHECK FIELDS
     ////////////////////////////////////////////////////////////////////////
 
-    if (!!req.body.email) {
-      ErrorsMapped.Custom.message = 'Changing Email is not allowed';
-      return ErrorsMapped.Custom;
-    }
+    // if (!!req.body.email) {
+    //   ErrorsMapped.Custom.message = 'Changing Email is not allowed';
+    //   return ErrorsMapped.Custom;
+    // }
 
     if (!!req.body.password) {
-      ErrorsMapped.Custom.message = 'Changing Email is not allowed';
+      ErrorsMapped.Custom.message = 'Changing Password is not allowed';
       return ErrorsMapped.Custom;
     }
 
@@ -93,7 +93,6 @@ export const update = async (req, res, next) => {
     }
 
     delete req.body.id
-    delete req.body.email
     delete req.body.password
 
     const user = await Users.update(

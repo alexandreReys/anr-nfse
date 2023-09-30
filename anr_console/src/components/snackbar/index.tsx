@@ -17,3 +17,17 @@ export const showSnackbarError = (text: string): void => {
     title: text,
   });
 };
+
+export const ShowProcessingCallback = (callback: () => void): void => {
+  Swal.fire({
+    icon: "success",
+    title: "Processando ...",
+    position: "top-end",
+    background: "white",
+    showConfirmButton: false,
+    timer: 1000,
+    timerProgressBar: true,
+  }).then(() => {
+    callback();
+  });
+};
