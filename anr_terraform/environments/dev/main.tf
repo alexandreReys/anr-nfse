@@ -12,8 +12,8 @@ module "users" {
   jwt_secret     = var.jwt_secret
 }
 
-module "sellers" {
-  source         = "../../infra/sellers"
+module "organizations" {
+  source         = "../../infra/organizations"
   environment    = var.environment
   write_capacity = 1
   read_capacity  = 1
