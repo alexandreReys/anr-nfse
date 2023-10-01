@@ -4,6 +4,7 @@ import * as services from '../services';
 
 import authRouter from './auth';
 import usersRouter from './users';
+import organizationsRouter from './organizations';
 
 const router = Router();
 
@@ -14,6 +15,7 @@ router.use((req, res, next) => {
 
 router.use('/auth/:version', authRouter);
 router.use('/api/:version/users', usersRouter);
+router.use('/api/:version/organizations', organizationsRouter);
 router.use('/api/', require('./root'));
 router.use('/', require('./root'));
 
