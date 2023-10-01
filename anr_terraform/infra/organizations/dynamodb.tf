@@ -9,14 +9,14 @@ resource "aws_dynamodb_table" "organizations" {
   }
 
   attribute {
-    name = "name"
+    name = "nationalRegistration"
     type = "S"
   }
 
   global_secondary_index {
-    name            = "${var.environment}-organizations-name-gsi"
+    name            = "${var.environment}-organizations-nationalRegistration-gsi"
     projection_type = "ALL"
-    hash_key        = "name"
+    hash_key        = "nationalRegistration"
     write_capacity  = var.write_capacity
     read_capacity   = var.read_capacity
   }
