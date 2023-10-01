@@ -4,6 +4,7 @@ import * as jwt from 'jsonwebtoken';
 import { ErrorsMapped } from '../config/errors-mapped';
 import * as utils from '../utils';
 import * as Users from '../models/users';
+import * as Orgs from '../models/organizations';
 
 
 export const checkReqVersion = (req: Request) => {
@@ -75,5 +76,15 @@ export const removeUserTests = async () => {
     users.forEach((user) => idsToDelete.push(user.id));
     console.log('Removing Users Tests:', idsToDelete);
     (await Users as any).batchDelete(idsToDelete);
+  }
+}
+
+export const removeOrganizationTests = async () => {
+  const orgs = await Orgs.scan('email').eq('test@test.com').exec();
+  if (orgs.length > 0) {
+    let idsToDelete:any[] = [];
+    orgs.forEach((user) => idsToDelete.push(user.id));
+    console.log('Removing Organizations Tests:', idsToDelete);
+    (await Orgs as any).batchDelete(idsToDelete);
   }
 }
