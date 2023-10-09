@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
-import * as Users from '@/store/reducers/userSlice';
+import * as Users from '@/store/reducers/usersSlice';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { ShowProcessingCallback } from '@/components/snackbar';
 import { useFilteredUsers } from '@/components/users/list/useDebounceUsers';

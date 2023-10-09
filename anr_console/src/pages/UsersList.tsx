@@ -5,7 +5,7 @@ import { getAPIClient } from '../services/axios'
 import UsersList from '../components/users/list'
 import Nav from '@/components/nav'
 
-export default function Projects() {
+export default function UsersListfw() {
   return (
     <>
       <Head>

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useUsers } from './useUsers';
 import { useSelector } from 'react-redux';
-import { selectUser } from '@/store/reducers/userSlice';
+import { selectUser } from '@/store/reducers/usersSlice';
 import { ShowProcessingCallback } from '@/components/snackbar';
 
 export default function Users() {

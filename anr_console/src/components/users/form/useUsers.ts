@@ -2,12 +2,11 @@ import { useCallback, useEffect } from "react";
 import { useRouter } from 'next/router';
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Swal from 'sweetalert2';
 import { schemaForm } from "./schema";
-import { AddressProps, FormProps } from "./types";
+import { FormProps } from "./types";
 
-import { useDispatch, useSelector } from 'react-redux';
-import * as Users from '@/store/reducers/userSlice';
+import { useDispatch } from 'react-redux';
+import * as Users from '@/store/reducers/usersSlice';
 import { unwrapResult } from "@reduxjs/toolkit";
 import { ShowProcessingCallback } from "@/components/snackbar";
 

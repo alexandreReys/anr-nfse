@@ -1,12 +1,12 @@
-import { PencilAltIcon, TrashIcon, SearchIcon, PlusIcon } from '@heroicons/react/solid';
-import { useUserList } from '@/components/users/list/useUsersList';
 import { useCallback } from 'react';
+import { PencilAltIcon, TrashIcon, SearchIcon, PlusIcon } from '@heroicons/react/solid';
+import { useOrganizationsList } from '@/components/organizations/list/useOrganizationsList';
 
-export default function ListaUsers() {
+export default function OrganizationsListComponent() {
 
   const {
-    users,
-    filteredUsers,
+    organizations,
+    filteredOrganizations,
     status,
     error,
     searchTerm,
@@ -14,7 +14,7 @@ export default function ListaUsers() {
     handleAddClick,
     handleEditClick,
     handleDeleteClick,
-  } = useUserList();
+  } = useOrganizationsList();
 
   const Loading = () => {
     return (
@@ -27,32 +27,32 @@ export default function ListaUsers() {
       <thead>
         <tr className="bg-gray-200 text-gray-800">
           <th className="px-4 py-2 text-left">Ações</th>
-          <th className="px-4 py-2 text-left">Email</th>
           <th className="px-4 py-2 text-left">Nome</th>
-          <th className="px-4 py-2 text-left">Sobrenome</th>
-          <th className="px-4 py-2 text-left">Role</th>
+          <th className="px-4 py-2 text-left">CNPJ</th>
+          <th className="px-4 py-2 text-left">Cidade</th>
+          <th className="px-4 py-2 text-left">Estado</th>
         </tr>
       </thead>
     );
   };
 
-  const TableRow = ({ user }) => {
+  const TableRow = ({ organization }) => {
     return (
-      <tr key={user.id} className="border-t">
+      <tr key={organization.email} className="border-t">
         <td className="px-4 py-2">
           <PencilAltIcon
             className="h-5 w-5 text-blue-500 inline-block mr-2 cursor-pointer"
-            onClick={() => handleEditClick(user)}
+            onClick={() => handleEditClick(organization)}
           />
           <TrashIcon
             className="h-5 w-5 text-red-500 inline-block cursor-pointer"
-            onClick={() => handleDeleteClick(user.id)}
+            onClick={() => handleDeleteClick(organization.id)}
           />
         </td>
-        <td className="text-sm px-4 py-2">{user.email}</td>
-        <td className="text-sm px-4 py-2">{user.firstName}</td>
-        <td className="text-sm px-4 py-2">{user.lastName}</td>
-        <td className="text-sm px-4 py-2">{user.role}</td>
+        <td className="text-sm px-4 py-2">{organization.name}</td>
+        <td className="text-sm px-4 py-2">{organization.nationalRegistration}</td>
+        <td className="text-sm px-4 py-2">{organization.city}</td>
+        <td className="text-sm px-4 py-2">{organization.state}</td>
       </tr>
     );
   };
@@ -68,12 +68,16 @@ export default function ListaUsers() {
     );
   };
 
-  const SearchBarIcon = () => <SearchIcon className="absolute top-2.5 right-16 h-6 w-6 text-gray-500" />
+  const SearchBarIcon = () => {
+    return (
+      <SearchIcon className="absolute top-2.5 right-16 h-6 w-6 text-gray-500" />
+    )
+  }
 
   return (
     <>
       <div className="max-w-7xl mx-auto p-4">
-        <h1 className="text-3xl font-bold mb-4">Lista de Usuários</h1>
+        <h1 className="text-3xl font-bold mb-4">Lista de Organizações</h1>
 
         {error && <div className="bg-red-200 text-red-700 p-3 rounded">{error}</div>}
 
@@ -101,9 +105,13 @@ export default function ListaUsers() {
               <Loading />
             }
 
-            {status === 'ok' && Array.isArray(filteredUsers) && filteredUsers.map((user: any) => (
-              <TableRow user={user} />
-            ))}
+            {
+              status === 'ok' &&
+              Array.isArray(filteredOrganizations) &&
+              filteredOrganizations.map((organization: any) => (
+                <TableRow organization={organization} />
+              ))
+            }
 
           </tbody>
         </table>

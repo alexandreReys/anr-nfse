@@ -2,18 +2,18 @@ import Head from 'next/head'
 import { parseCookies } from 'nookies'
 import { GetServerSideProps } from 'next'
 import { getAPIClient } from '../services/axios'
-import Users from '../components/users/form'
-import Nav from '../components/nav'
+import OrganizationsListComponent from '../components/organizations/list'
+import Nav from '@/components/nav'
 
-export default function UsersPage() {
+export default function OrganizationsList() {
   return (
-    <div>
+    <>
       <Head>
-        <title>Usuários</title>
+        <title>Lista de Organizações</title>
       </Head>
       <Nav />
-      <Users />
-    </div>
+      <OrganizationsListComponent />
+    </>
   )
 }
 
