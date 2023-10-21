@@ -5,9 +5,13 @@ const tableName = 'users'
 
 const UsersSchema = new dynamoose.Schema(
   {
-    id: {
+    organizationId: {
       type: String,
       hashKey: true,
+    },
+    id: {
+      type: String,
+      rangeKey: true,
       global: true,
       default: uuid.v4,
     },

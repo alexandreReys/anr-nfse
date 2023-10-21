@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
-import { PencilAltIcon, TrashIcon, SearchIcon, PlusIcon } from '@heroicons/react/solid';
+import { PencilAltIcon, TrashIcon, SearchIcon, PlusIcon, UserIcon } from '@heroicons/react/solid';
 import { useOrganizationsList } from '@/components/organizations/list/useOrganizationsList';
+import { Tooltip } from 'react-tooltip'
 
 export default function OrganizationsListComponent() {
 
@@ -40,14 +41,31 @@ export default function OrganizationsListComponent() {
     return (
       <tr key={organization.email} className="border-t">
         <td className="px-4 py-2">
-          <PencilAltIcon
-            className="h-5 w-5 text-blue-500 inline-block mr-2 cursor-pointer"
-            onClick={() => handleEditClick(organization)}
-          />
-          <TrashIcon
-            className="h-5 w-5 text-red-500 inline-block cursor-pointer"
-            onClick={() => handleDeleteClick(organization.id)}
-          />
+
+          <a data-tooltip-id="alterar" data-tooltip-content="Alterar">
+            <PencilAltIcon
+              className="h-5 w-5 text-blue-500 inline-block mr-2 cursor-pointer"
+              onClick={() => handleEditClick(organization)}
+            />
+          </a>
+          <Tooltip id="alterar" />
+
+          <a data-tooltip-id="deletar" data-tooltip-content="Deletar">
+            <TrashIcon
+              className="h-5 w-5 text-red-500 inline-block mr-2 cursor-pointer"
+              onClick={() => handleDeleteClick(organization.id)}
+            />
+          </a>
+          <Tooltip id="deletar" />
+
+          <a data-tooltip-id="usuarios" data-tooltip-content="Usuários">
+            <UserIcon
+              className="h-5 w-5 text-green-500 inline-block cursor-pointer"
+              onClick={() => console.log(organization.id)}
+            />
+          </a>
+          <Tooltip id="usuarios" />
+
         </td>
         <td className="text-sm px-4 py-2">{organization.name}</td>
         <td className="text-sm px-4 py-2">{organization.nationalRegistration}</td>

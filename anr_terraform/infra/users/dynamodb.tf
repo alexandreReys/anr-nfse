@@ -1,7 +1,9 @@
 resource "aws_dynamodb_table" "users" {
-  name     = "${var.environment}-users"
-  hash_key = "id"
+  name = "${var.environment}-users"
   # billing_mode = "PAY_PER_REQUEST"
+
+  hash_key  = "organizationId"
+  range_key = "id"
 
   attribute {
     name = "id"
@@ -9,21 +11,13 @@ resource "aws_dynamodb_table" "users" {
   }
 
   attribute {
-    name = "companyId"
+    name = "organizationId"
     type = "S"
   }
 
   attribute {
     name = "email"
     type = "S"
-  }
-
-  global_secondary_index {
-    name            = "${var.environment}-users-companyId-gsi"
-    projection_type = "ALL"
-    hash_key        = "companyId"
-    write_capacity  = var.write_capacity
-    read_capacity   = var.read_capacity
   }
 
   global_secondary_index {

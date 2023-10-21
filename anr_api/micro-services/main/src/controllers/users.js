@@ -10,7 +10,11 @@ import Users from '../models/users';
 
 async function canUpdate(req) {
   try {
-    const user = await Users.get(req.params.id);
+    const user = await Users.get({ 
+      organizationId: req.params.organizationId, 
+      id: req.params.id 
+    });
+
     if (user === undefined || !user) {
       return ErrorsMapped.RecordNotExist;
     }
@@ -19,26 +23,10 @@ async function canUpdate(req) {
     //  CHECK FIELDS
     ////////////////////////////////////////////////////////////////////////
 
-    // if (!!req.body.email) {
-    //   ErrorsMapped.Custom.message = 'Changing Email is not allowed';
-    //   return ErrorsMapped.Custom;
-    // }
-
     if (!!req.body.password) {
       ErrorsMapped.Custom.message = 'Changing Password is not allowed';
       return ErrorsMapped.Custom;
     }
-
-    ////////////////////////////////////////////////////////////////////////
-    //  NORMALIZATIONS
-    ////////////////////////////////////////////////////////////////////////
-
-    ////////////////////////////////////////////////////////////////////////
-    //  CHECK PERMISSION
-    ////////////////////////////////////////////////////////////////////////
-
-    // if (!(await utils.isUserAdminOrOwner(req, user.id)))
-    //   return ErrorsMapped.NoPermissionToUpdate;
 
     ////////////////////////////////////////////////////////////////////////
     //  VALIDATIONS
@@ -55,7 +43,11 @@ async function canUpdate(req) {
 
 async function canDelete(req) {
   try {
-    let user = await Users.get(req.params.id);
+    const user = await Users.get({ 
+      organizationId: req.params.organizationId, 
+      id: req.params.id 
+    });
+    
     if (user === undefined || !user) {
       return ErrorsMapped.RecordNotExist;
     }
@@ -72,13 +64,39 @@ async function canDelete(req) {
 
 export const create = async (req, res, next) => {
   try {
-    delete req.body.id
+    delete req.body.id;
+    
+    req.body.password = bcrypt.hashSync(req.body.password, 10);
 
     const user = await Users.create(req.body);
 
     delete user.password
 
     return res.json(user);  
+  } catch (error) {
+    ErrorsMapped.Custom.message = error;
+    return utils.sendError(ErrorsMapped.Custom, next);
+  }
+};
+
+export const get = async (req, res, next) => {
+  try {
+    const user = await Users.get({ 
+      organizationId: req.params.organizationId, 
+      id: req.params.id
+    });
+
+    if (user === undefined || !user) {
+      return utils.sendError(ErrorsMapped.RecordNotExist, next);
+    }
+
+    let response = { user };
+
+    if (req.version === 'v2') {
+      response = { user: { info: user } }
+    }
+    
+    return res.json(response);  
   } catch (error) {
     ErrorsMapped.Custom.message = error;
     return utils.sendError(ErrorsMapped.Custom, next);
@@ -92,11 +110,15 @@ export const update = async (req, res, next) => {
       return utils.sendError(error, next);
     }
 
+    delete req.body.organizationId
     delete req.body.id
     delete req.body.password
 
     const user = await Users.update(
-      { id: req.params.id },
+      {
+        organizationId: req.params.organizationId,
+        id: req.params.id
+      },
       req.body
     );
 
@@ -109,27 +131,9 @@ export const update = async (req, res, next) => {
   }
 };
 
-export const remove = async (req, res, next) => {
+export const listByOrganization = async (req, res, next) => {
   try {
-    const error = await canDelete(req);
-    if (error) {
-      return utils.sendError(error, next);
-    }
-
-    const user = await Users.delete(req.params.id);
-
-    return res.json({ message: 'success' });
-  } catch (error) {
-    ErrorsMapped.Custom.message = error;
-    return utils.sendError(ErrorsMapped.Custom, next);
-  }
-};
-
-export const listAll = async (req, res, next) => {
-  try {
-    // req.body.user = utils.getUser(req);
-
-    const users = await Users.scan().exec();
+    const users = await Users.query('organizationId').eq(req.params.organizationId).exec();
 
     let response = { users };
 
@@ -148,62 +152,17 @@ export const listAll = async (req, res, next) => {
   }
 };
 
-export const get = async (req, res, next) => {
+export const remove = async (req, res, next) => {
   try {
-    // req.body.user = utils.getUser(req);
-
-    const user = await Users.get(req.params.id);
-    if (user === undefined || !user) {
-      return utils.sendError(ErrorsMapped.RecordNotExist, next);
+    const error = await canDelete(req);
+    if (error) {
+      return utils.sendError(error, next);
     }
 
-    let response = { user };
-
-    if (req.version === 'v2') {
-      response = { user: { info: user } }
-    }
-    
-    return res.json(response);  
-  } catch (error) {
-    ErrorsMapped.Custom.message = error;
-    return utils.sendError(ErrorsMapped.Custom, next);
-  }
-};
-
-export const me = async (req, res, next) => {
-  try {
-    const token = services.getTokenData(req);
-
-    if (token.error) {
-      return utils.sendError(token.error, next);
-    }
-
-    const user = await Users.get(token.data.id);
-    if (user === undefined || !user) {
-      return utils.sendError(ErrorsMapped.RecordNotExist, next);
-    }
-
-    if (user.token !== undefined) delete user.token;
-
-    delete user.password;
-    delete user.wixId;
-
-    let response = { user, token: token.data.token };
-
-    if (req.version === 'v2') {
-      response = { user: { info: user }, token: token.data.token }
-    }
-    
-    return res.json(response);    
-  } catch (error) {
-    ErrorsMapped.Custom.message = error;
-    return utils.sendError(ErrorsMapped.Custom, next);
-  }
-};
-
-export const removeTests = async (req, res, next) => {
-  try {
-    await services.removeUserTests();
+    const user = await Users.delete({ 
+      organizationId: req.params.organizationId, 
+      id: req.params.id 
+    });
 
     return res.json({ message: 'success' });
   } catch (error) {
