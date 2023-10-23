@@ -2,6 +2,8 @@ import { useCallback } from 'react';
 import { PencilAltIcon, TrashIcon, SearchIcon, PlusIcon, UserIcon } from '@heroicons/react/solid';
 import { useOrganizationsList } from '@/components/organizations/list/useOrganizationsList';
 import { Tooltip } from 'react-tooltip'
+import IconListButton from '@/components/shared/IconListButton'
+import Loading from '@/components/shared/Loading'
 
 export default function OrganizationsListComponent() {
 
@@ -15,13 +17,8 @@ export default function OrganizationsListComponent() {
     handleAddClick,
     handleEditClick,
     handleDeleteClick,
+    handleUsersClick,
   } = useOrganizationsList();
-
-  const Loading = () => {
-    return (
-      <div className='mt-6 ml-6 text-3xl font-bold text-yellow-600'>LOADING ...</div>
-    );
-  };
 
   const TableHeader = () => {
     return (
@@ -42,30 +39,28 @@ export default function OrganizationsListComponent() {
       <tr key={organization.email} className="border-t">
         <td className="px-4 py-2">
 
-          <a data-tooltip-id="alterar" data-tooltip-content="Alterar">
-            <PencilAltIcon
-              className="h-5 w-5 text-blue-500 inline-block mr-2 cursor-pointer"
-              onClick={() => handleEditClick(organization)}
-            />
-          </a>
-          <Tooltip id="alterar" />
+          <IconListButton
+            tooltipId="tooltip"
+            tooltipContent="Alterar"
+            icon={<PencilAltIcon className="h-5 w-5 text-blue-500 inline-block mr-2 cursor-pointer" />}
+            onClick={() => handleEditClick(organization)}
+          />
 
-          <a data-tooltip-id="deletar" data-tooltip-content="Deletar">
-            <TrashIcon
-              className="h-5 w-5 text-red-500 inline-block mr-2 cursor-pointer"
-              onClick={() => handleDeleteClick(organization.id)}
-            />
-          </a>
-          <Tooltip id="deletar" />
+          <IconListButton
+            tooltipId="tooltip"
+            tooltipContent="Deletar"
+            icon={<TrashIcon className="h-5 w-5 text-red-500 inline-block mr-2 cursor-pointer" />}
+            onClick={() => handleDeleteClick(organization.id)}
+          />
 
-          <a data-tooltip-id="usuarios" data-tooltip-content="Usuários">
-            <UserIcon
-              className="h-5 w-5 text-green-500 inline-block cursor-pointer"
-              onClick={() => console.log(organization.id)}
-            />
-          </a>
-          <Tooltip id="usuarios" />
+          <IconListButton
+            tooltipId="tooltip"
+            tooltipContent="Usuários"
+            icon={<UserIcon className="h-5 w-5 text-green-500 inline-block cursor-pointer" />}
+            onClick={() => handleUsersClick(organization)}
+          />
 
+          <Tooltip id="tooltip" />
         </td>
         <td className="text-sm px-4 py-2">{organization.name}</td>
         <td className="text-sm px-4 py-2">{organization.nationalRegistration}</td>
@@ -127,7 +122,7 @@ export default function OrganizationsListComponent() {
               status === 'ok' &&
               Array.isArray(filteredOrganizations) &&
               filteredOrganizations.map((organization: any) => (
-                <TableRow organization={organization} />
+                <TableRow key={organization.id} organization={organization} />
               ))
             }
 

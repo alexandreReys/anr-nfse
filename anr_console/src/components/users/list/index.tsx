@@ -1,8 +1,11 @@
-import { PencilAltIcon, TrashIcon, SearchIcon, PlusIcon } from '@heroicons/react/solid';
-import { useUserList } from '@/components/users/list/useUsersList';
 import { useCallback } from 'react';
+import { PencilAltIcon, TrashIcon, SearchIcon, PlusIcon, UserIcon } from '@heroicons/react/solid';
+import { useUsersList } from '@/components/users/list/useUsersList';
+import { Tooltip } from 'react-tooltip'
+import IconListButton from '@/components/shared/IconListButton'
+import Loading from '@/components/shared/Loading'
 
-export default function ListaUsers() {
+export default function UsersListComponent() {
 
   const {
     users,
@@ -14,13 +17,9 @@ export default function ListaUsers() {
     handleAddClick,
     handleEditClick,
     handleDeleteClick,
-  } = useUserList();
-
-  const Loading = () => {
-    return (
-      <div className='mt-6 ml-6 text-3xl font-bold text-yellow-600'>LOADING ...</div>
-    );
-  };
+    organizationId,
+    organizationName,
+  } = useUsersList();
 
   const TableHeader = () => {
     return (
@@ -40,14 +39,22 @@ export default function ListaUsers() {
     return (
       <tr key={user.id} className="border-t">
         <td className="px-4 py-2">
-          <PencilAltIcon
-            className="h-5 w-5 text-blue-500 inline-block mr-2 cursor-pointer"
+
+          <IconListButton
+            tooltipId="Tooltip"
+            tooltipContent="Alterar"
+            icon={<PencilAltIcon className="h-5 w-5 text-blue-500 inline-block mr-2 cursor-pointer" />}
             onClick={() => handleEditClick(user)}
           />
-          <TrashIcon
-            className="h-5 w-5 text-red-500 inline-block cursor-pointer"
+
+          <IconListButton
+            tooltipId="Tooltip"
+            tooltipContent="Deletar"
+            icon={<TrashIcon className="h-5 w-5 text-red-500 inline-block mr-2 cursor-pointer" />}
             onClick={() => handleDeleteClick(user.id)}
           />
+
+          <Tooltip id="Tooltip" />
         </td>
         <td className="text-sm px-4 py-2">{user.email}</td>
         <td className="text-sm px-4 py-2">{user.firstName}</td>
@@ -68,12 +75,17 @@ export default function ListaUsers() {
     );
   };
 
-  const SearchBarIcon = () => <SearchIcon className="absolute top-2.5 right-16 h-6 w-6 text-gray-500" />
+  const SearchBarIcon = () => {
+    return (
+      <SearchIcon className="absolute top-2.5 right-16 h-6 w-6 text-gray-500" />
+    )
+  }
 
   return (
     <>
       <div className="max-w-7xl mx-auto p-4">
-        <h1 className="text-3xl font-bold mb-4">Lista de Usuários</h1>
+        <h1 className="text-2xl font-bold mb-4  text-blue-900"></h1>
+        <h1 className="text-3xl font-bold mb-4">Lista de Usuários - {organizationName}</h1>
 
         {error && <div className="bg-red-200 text-red-700 p-3 rounded">{error}</div>}
 
@@ -101,9 +113,13 @@ export default function ListaUsers() {
               <Loading />
             }
 
-            {status === 'ok' && Array.isArray(filteredUsers) && filteredUsers.map((user: any) => (
-              <TableRow user={user} />
-            ))}
+            {
+              status === 'ok' &&
+              Array.isArray(filteredUsers) &&
+              filteredUsers.map((user: any) => (
+                <TableRow key={user.id} user={user} />
+              ))
+            }
 
           </tbody>
         </table>

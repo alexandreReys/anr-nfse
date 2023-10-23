@@ -72,11 +72,6 @@ export default function Organizations() {
     </>
   );
 
-  if (organization !== undefined && organization) {
-    console.log('organization.state', organization.state);
-  }
-
-
   return (
     <>
       <main className="mx-auto">
@@ -140,7 +135,7 @@ export default function Organizations() {
               <div className="flex-1">
                 <label className={labelStyles}>Complemento</label>
                 <input {...register('organization.complement')} onKeyDown={handleKeyDown} className={inputStyles} type="text" maxLength={40} />
-              </div>state
+              </div>
             </div>
 
             <div className="flex gap-4">
@@ -185,11 +180,11 @@ export default function Organizations() {
             </div>
 
             <div className='flex justify-between mx-2'>
-              <button type="button" className={buttonStyles} onClick={handleCancel}>
-                Cancelar
-              </button>
               <button type="submit" className={buttonStyles}>
                 Salvar
+              </button>
+              <button type="button" className={buttonStyles} onClick={handleCancel}>
+                Cancelar
               </button>
             </div>
 

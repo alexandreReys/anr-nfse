@@ -2,6 +2,7 @@ import { z } from 'zod';
 
 export const schemaForm = z.object({
   user: z.object({
+    organizationId: z.string(),
     id: z.string(),
     email: z.string(),
     firstName: z.string(),
@@ -12,6 +13,7 @@ export const schemaForm = z.object({
   })
 }).transform((field) => ({
   user: {
+    organizationId: field.user.organizationId,
     id: field.user.id,
     email: field.user.email,
     firstName: field.user.firstName,

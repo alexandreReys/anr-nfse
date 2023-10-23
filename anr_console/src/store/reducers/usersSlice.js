@@ -17,8 +17,8 @@ export const getUsers = createAsyncThunk('users/getUsers', async (userId) => {
   return response.data;
 });
 
-export const listUsers = createAsyncThunk('users/listUsers', async () => {
-  const response = await api.get(`${apiUrl}/list`);
+export const listUsers = createAsyncThunk('users/listUsers', async (organizationId) => {
+  const response = await api.get(`${apiUrl}/list/${organizationId}`);
   return response.data;
 });
 
@@ -29,15 +29,19 @@ export const addUser = createAsyncThunk('users/addUser', async (user) => {
 });
 
 export const updateUser = createAsyncThunk('users/updateUser', async (userData) => {
+  const userOrganizationId = userData.organizationId;
   const userId = userData.id;
+
   delete userData.id;
   delete userData.password;
-  const response = await api.put(`${apiUrl}/${userId}`, userData);
+  
+  const response = await api.put(`${apiUrl}/${userOrganizationId}/${userId}`, userData);
   return response.data;
 });
 
-export const deleteUser = createAsyncThunk('users/deleteUser', async (userId) => {
-  const response = await api.delete(`${apiUrl}/${userId}`);
+export const deleteUser = createAsyncThunk('users/deleteUser', async (userKey) => {
+  const {organizationId, userId} = userKey;
+  const response = await api.delete(`${apiUrl}/${organizationId}/${userId}`);
   return response.data;
 });
 

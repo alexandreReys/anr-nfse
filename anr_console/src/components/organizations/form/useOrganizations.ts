@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from 'next/router';
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -17,6 +17,7 @@ const apiUrl = 'https://viacep.com.br/ws';
 export const useOrganizations = () => {
   const dispatch = useDispatch();
   const router = useRouter();
+  const [isMounted, setIsMounted] = useState(false);
 
   const labelStyles = 'w-30 inline-block mt-4 font-bold text-gray-600';
   const inputStyles = 'flex w-full border border-gray-500 px-2 py-1 rounded';
@@ -54,7 +55,7 @@ export const useOrganizations = () => {
     setValue('organization.street', data.logradouro);
     setValue('organization.state', data.uf);
     setValue('organization.district', data.bairro);
-    setValue('organization.complement', data.complemento);
+    setValue('organization.complement', '');
   }, [setValue])
   
   const handleFetchAddress = useCallback(async (zipCode: string) => {
@@ -65,6 +66,12 @@ export const useOrganizations = () => {
   useEffect(() => {
     setValue('organization.zipCode', zipCodeMask(zipCode));
     if (zipCode.length !== 9) return;
+
+    if (!isMounted) {
+      setIsMounted(true);
+      return;
+    }
+
     handleFetchAddress(zipCode);
   }, [handleFetchAddress, zipCode]);
 

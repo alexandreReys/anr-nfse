@@ -5,7 +5,7 @@ import Router from 'next/router'
 import { setCookie, parseCookies } from 'nookies';
 import { api } from "../../services/api";
 import { User, SignInData, AuthContextType } from '@/context/authContext/types';
-import { ChildrenProps } from '@/types/types';
+import { ChildrenProps } from '@/types';
 
 export const AuthContext = createContext({} as AuthContextType);
 

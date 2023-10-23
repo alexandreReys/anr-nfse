@@ -51,7 +51,7 @@ export const useUsers = () => {
     }
     
     ShowProcessingCallback( () => {
-      router.push('/UsersList');
+      router.push((`/UsersList?organizationId=${data.user.organizationId}`));
     })
   };
 

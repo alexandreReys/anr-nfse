@@ -1,4 +1,3 @@
-// useOrganizationList.ts
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
@@ -6,7 +5,7 @@ import * as Organizations from '@/store/reducers/organizationsSlice';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { ShowProcessingCallback } from '@/components/snackbar';
 import { useFilteredOrganizations } from '@/components/organizations/list/useDebounce';
-import { OrganizationType } from '../types';
+import { Organization } from '@/types';
 
 export const useOrganizationsList = () => {
   const dispatch = useDispatch();
@@ -26,7 +25,7 @@ export const useOrganizationsList = () => {
       name: '',
       stateRegistration: '',
       nationalRegistration: '',
-      zipCode: '',
+      zipCode: '         ', // É necessario enviar 9 digitos em branco na inclusao
       street: '',
       number: '',
       district: '',
@@ -40,9 +39,13 @@ export const useOrganizationsList = () => {
     router.push('/Organizations');
   };
 
-  const handleEditClick = (organization: OrganizationType) => {
+  const handleEditClick = (organization: Organization) => {
     dispatch(Organizations.setOrganization(organization));
     router.push('/Organizations');
+  };
+  
+  const handleUsersClick = (organization: Organization) => {
+    router.push(`/UsersList?organizationId=${organization.id}&organizationName=${organization.name}`);
   };
 
   const handleDeleteClick = async (organizationId: string) => {
@@ -64,5 +67,6 @@ export const useOrganizationsList = () => {
     handleAddClick,
     handleEditClick,
     handleDeleteClick,
+    handleUsersClick,
   };
 };

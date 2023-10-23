@@ -22,6 +22,7 @@ export default function Users() {
 
   useEffect(() => {
     if (user) {
+      setValue('user.organizationId', user.organizationId);
       setValue('user.id', user.id);
       setValue('user.firstName', user.firstName);
       setValue('user.lastName', user.lastName);
@@ -32,7 +33,7 @@ export default function Users() {
   }, [user, setValue]);
 
   const handleCancel = () => {
-    router.push('/UsersList');
+    router.push((`/UsersList?organizationId=${user.organizationId}`));
   }
 
   const Header = () => (
@@ -85,11 +86,11 @@ export default function Users() {
             </div>
 
             <div className='flex justify-between mx-2'>
-              <button type="button" className={buttonStyles} onClick={handleCancel}>
-                Cancelar
-              </button>
               <button type="submit" className={buttonStyles}>
                 Salvar
+              </button>
+              <button type="button" className={buttonStyles} onClick={handleCancel}>
+                Cancelar
               </button>
             </div>
 
