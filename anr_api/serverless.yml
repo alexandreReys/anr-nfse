@@ -12,6 +12,9 @@ provider:
 
 custom:
   project: anr
+  apigwBinary:
+    types:
+      - "*/*"
   serverless-offline:
     useChildProcesses: true
     noPrependStageInUrl: true
@@ -26,10 +29,11 @@ custom:
   #   createRoute53Record: true
 
 plugins:
+  - serverless-apigw-binary
   - serverless-plugin-typescript
   - serverless-offline
-  # - serverless-domain-manager
   - serverless-dotenv-plugin
+  # - serverless-domain-manager
 
 functions:
   # ============================
