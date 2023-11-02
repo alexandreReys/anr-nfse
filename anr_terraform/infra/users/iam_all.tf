@@ -3,7 +3,7 @@
 # ==============================================================
 resource "aws_iam_role" "all_iam_role" {
   name               = "${var.environment}-all-iam-role"
-  assume_role_policy = templatefile("${path.module}/templates/lambda-base-policy.tpl", {})
+  assume_role_policy = templatefile("${path.module}/../templates/lambda-base-policy.tpl", {})
   # })
 }
 
@@ -18,7 +18,7 @@ resource "aws_ssm_parameter" "all_iam_role" {
 # ==============================================================
 resource "aws_iam_policy" "all_iam_policy" {
   name = "${var.environment}-all-iam-policy"
-  policy = templatefile("${path.module}/templates/dynamodb-policy.tpl", {
+  policy = templatefile("${path.module}/../templates/dynamodb-policy.tpl", {
     sns_topic = ""
   })
 }
