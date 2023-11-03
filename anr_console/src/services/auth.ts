@@ -11,8 +11,24 @@ type SignInRequestData = {
 
 export async function signInRequest(data: SignInRequestData) {
   try {
-    const response = await api.post('/auth/v1/login', data);
-    return response.data;
+    let response = {};
+
+    const user = await api.post('/auth/v1/login', data);
+
+    if (!!user) {
+      response = user.data;
+    }
+
+    const organization = await api.get(`/api/v1/organizations/${user.data.user.organizationId}`);
+
+    if (!!organization) {
+      response = {
+        ...response,
+        organization: organization.data.organization,
+      }
+    }
+
+    return response;
   } catch (error) {
     showSnackbarError('Credenciais invalidas !!');
     return null;
@@ -27,7 +43,7 @@ export async function recoverUserInformation() {
       email: 'anr.alexandre@gmail.com',
       firstName: 'Alexandre',
       lastName: 'Reys',
-      profileImgUrl: 'https://github.com/alexandreReys.png',
+      profileImgUrl: '', //'https://github.com/alexandreReys.png',
       role: '',
       password: '',
     }
