@@ -1,7 +1,7 @@
 const bcrypt = require('bcryptjs');
 const utils = require('../utils');
 const { ErrorsMapped } = require('../config/errors-mapped');
-const User = require('../models/users');
+import User from '../models/users';
 
 ////////////////////////////////////////////////////////////////////////
 //  Auxiliary functions
