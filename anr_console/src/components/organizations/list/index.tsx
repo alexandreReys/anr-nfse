@@ -8,6 +8,7 @@ import Loading from '@/components/shared/Loading'
 export default function OrganizationsListComponent() {
 
   const {
+    user,
     organizations,
     filteredOrganizations,
     status,

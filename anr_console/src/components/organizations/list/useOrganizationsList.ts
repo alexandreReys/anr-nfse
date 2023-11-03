@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import * as Organizations from '@/store/reducers/organizationsSlice';
@@ -6,8 +6,10 @@ import { unwrapResult } from '@reduxjs/toolkit';
 import { ShowProcessingCallback } from '@/components/snackbar';
 import { useFilteredOrganizations } from '@/components/organizations/list/useDebounce';
 import { Organization } from '@/types';
+import { AuthContext } from "@/context/authContext/AuthContext";
 
 export const useOrganizationsList = () => {
+  const { user } = useContext(AuthContext);
   const dispatch = useDispatch();
   const router = useRouter();
   const [error, setError] = useState(null);
@@ -58,6 +60,7 @@ export const useOrganizationsList = () => {
   };
 
   return {
+    user,
     organizations,
     filteredOrganizations,
     status,
