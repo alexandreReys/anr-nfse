@@ -29,7 +29,7 @@ export function AuthProvider({ children }: ChildrenProps) {
 
     if (!response) return;
 
-    const { token, user } = response;
+    const { token, user, organization } = response;
 
     setCookie(undefined, 'nextauth.token', token, {
       maxAge: 60 * 60 * 1, // 1 hour
@@ -37,7 +37,12 @@ export function AuthProvider({ children }: ChildrenProps) {
 
     api.defaults.headers['Authorization'] = `Bearer ${token}`;
 
-    setUser(user);
+    const x = {
+      ...user,
+      organizationName: organization.name,
+    }
+
+    setUser(x);
 
     Router.push('/Dashboard');
   }
