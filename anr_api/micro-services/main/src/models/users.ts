@@ -1,7 +1,19 @@
-const dynamoose = require('dynamoose');
-const uuid = require('../utils/uuid');
+import * as dynamoose from 'dynamoose';
+import { Item } from 'dynamoose/dist/Item'
+import { v4 as uuidv4 } from 'uuid';
 const defaultData = require('../utils/default-data');
 const tableName = 'users'
+
+class IUser extends Item {
+  organizationId: String;
+  id: String;
+  email: String;
+  password: String;
+  firstName: String;
+  lastName: String;
+  profileImgUrl: String;
+  role: String;
+};
 
 const UsersSchema = new dynamoose.Schema(
   {
@@ -12,15 +24,13 @@ const UsersSchema = new dynamoose.Schema(
     id: {
       type: String,
       rangeKey: true,
-      global: true,
-      default: uuid.v4,
+      default: uuidv4(),
     },
     email: {
       type: String,
+      default: '',
       index: {
         name: `${process.env.PROJECT_ENVIRONMENT}-${tableName}-email-gsi`,
-        global: true,
-        default: '',
       },
     },
     password: {
@@ -48,7 +58,7 @@ const UsersSchema = new dynamoose.Schema(
     timestamps: true,
   }
 );
-module.exports = dynamoose.model(
+export default dynamoose.model<IUser>(
   `${process.env.PROJECT_ENVIRONMENT}-${tableName}`,
   UsersSchema,
   {

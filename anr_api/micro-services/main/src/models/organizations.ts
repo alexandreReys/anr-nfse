@@ -1,22 +1,38 @@
-const dynamoose = require('dynamoose');
-const uuid = require('../utils/uuid');
+import * as dynamoose from 'dynamoose';
+import { Item } from 'dynamoose/dist/Item'
+import { v4 as uuidv4 } from 'uuid';
 const defaultData = require('../utils/default-data');
 const tableName = 'organizations'
+
+class IOrganizations extends Item {
+  id: String;
+  nationalRegistration: String;
+  name: String;
+  stateRegistration: String;
+  zipCode: String;
+  street: String;
+  number: String;
+  district: String;
+  complement: String;
+  city: String;
+  state: String;
+  phoneNumber: String;
+  email: String;
+  additionalRemarks: String;
+};
 
 const OrganizationsSchema = new dynamoose.Schema(
   {
     id: {
       type: String,
       hashKey: true,
-      global: true,
-      default: uuid.v4,
+      default: uuidv4(),
     },
     nationalRegistration: {
       type: String,
       required: true,
       index: {
         name: `${process.env.PROJECT_ENVIRONMENT}-${tableName}-nationalRegistration-gsi`,
-        global: true,
       },
     },
     name: {
@@ -72,7 +88,7 @@ const OrganizationsSchema = new dynamoose.Schema(
     timestamps: true,
   }
 );
-module.exports = dynamoose.model(
+export default dynamoose.model<IOrganizations>(
   `${process.env.PROJECT_ENVIRONMENT}-${tableName}`,
   OrganizationsSchema,
   {
