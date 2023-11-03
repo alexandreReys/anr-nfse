@@ -3,8 +3,9 @@ import { Request } from "express";
 import * as jwt from 'jsonwebtoken';
 import { ErrorsMapped } from '../config/errors-mapped';
 import * as utils from '../utils';
-import * as Users from '../models/users';
-import * as Orgs from '../models/organizations';
+import Users from '../models/users';
+import Organizations from '../models/organizations';
+import Services from '../models/services';
 
 
 export const checkReqVersion = (req: Request) => {
@@ -75,16 +76,26 @@ export const removeUserTests = async () => {
     let idsToDelete:any[] = [];
     users.forEach((user) => idsToDelete.push(user.id));
     console.log('Removing Users Tests:', idsToDelete);
-    (await Users as any).batchDelete(idsToDelete);
+    await Users.batchDelete(idsToDelete);
   }
 }
 
 export const removeOrganizationTests = async () => {
-  const orgs = await Orgs.scan('email').eq('test@test.com').exec();
-  if (orgs.length > 0) {
+  const organizations = await Organizations.scan('email').eq('test@test.com').exec();
+  if (organizations.length > 0) {
     let idsToDelete:any[] = [];
-    orgs.forEach((user) => idsToDelete.push(user.id));
+    organizations.forEach((user) => idsToDelete.push(user.id));
     console.log('Removing Organizations Tests:', idsToDelete);
-    (await Orgs as any).batchDelete(idsToDelete);
+    (await Organizations as any).batchDelete(idsToDelete);
+  }
+}
+
+export const removeServiceTests = async () => {
+  const services = await Services.scan('email').eq('test@test.com').exec();
+  if (services.length > 0) {
+    let idsToDelete:any[] = [];
+    services.forEach((service) => idsToDelete.push(service.id));
+    console.log('Removing Services Tests:', idsToDelete);
+    await Services.batchDelete(idsToDelete);
   }
 }
