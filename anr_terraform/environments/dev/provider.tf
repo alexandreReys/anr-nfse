@@ -5,9 +5,17 @@ terraform {
       version = "~> 3.0"
     }
   }
+
+  # todo
+  # backend "s3" {
+  #   bucket         = "tfstate-anr-aws"
+  #   key            = "nfse.tf"
+  #   region         = "us-east-2"
+  #   profile        = "anr"
+  #   dynamodb_table = "tfstate-anr-aws"
+  # }
 }
 
-# Configure the AWS Provider
 provider "aws" {
   region  = var.region
   profile = var.profile
