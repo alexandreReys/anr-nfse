@@ -1,12 +1,18 @@
-export interface UserData {
+export interface IUser {
+  organizationId: string;
   id: string;
-  wixId?: string;
   email: string;
-  password?: string;
+  password: string;
   firstName: string;
   lastName: string;
-  profileImage: string;
-  avatar: string;
-  avatarType: string;
-  role?: string;
+  profileImgUrl: string;
+  role: string;
+};
+
+export interface IService {
+  organizationId: string;
+  id: string;
+  description: string;
+  price: number;
+  additionalRemarks: string;
 };
