@@ -6,12 +6,12 @@ resource "aws_dynamodb_table" "users" {
   range_key = "id"
 
   attribute {
-    name = "id"
+    name = "organizationId"
     type = "S"
   }
 
   attribute {
-    name = "organizationId"
+    name = "id"
     type = "S"
   }
 
