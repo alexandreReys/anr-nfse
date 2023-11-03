@@ -15,44 +15,6 @@ function classNames(...classes: ClassValue[]): string {
 export default function Nav() {
   const { user } = useContext(AuthContext);
 
-  const DropdownMotoristas = () => {
-    return (
-      <Menu as="div" className="relative inline-block text-left">
-        <div>
-          <Menu.Button className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
-            Motoristas
-          </Menu.Button>
-        </div>
-        <Transition
-          as={Fragment}
-          enter="transition ease-out duration-100"
-          enterFrom="transform opacity-0 scale-95"
-          enterTo="transform opacity-100 scale-100"
-          leave="transition ease-in duration-75"
-          leaveFrom="transform opacity-100 scale-100"
-          leaveTo="transform opacity-0 scale-95"
-        >
-          <Menu.Items className="origin-top-right absolute left-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
-            <Menu.Item>
-              <Link href="/Motoristas">
-                <span className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer">
-                  Incluir
-                </span>
-              </Link>
-            </Menu.Item>
-            <Menu.Item>
-              <Link href="/MotoristasLista">
-                <span className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer">
-                  Cadastro
-                </span>
-              </Link>
-            </Menu.Item>
-          </Menu.Items>
-        </Transition>
-      </Menu>
-    )
-  }
-
   const DropdownOrganizations = () => {
     return (
       <Link href="/OrganizationsList">
@@ -89,41 +51,13 @@ export default function Nav() {
     )
   }
 
-  const DropdownCargas = () => {
+  const DropdownServices = ({ user }) => {
     return (
-      <Menu as="div" className="relative inline-block text-left">
-        <div>
-          <Menu.Button className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
-            Cargas
-          </Menu.Button>
-        </div>
-        <Transition
-          as={Fragment}
-          enter="transition ease-out duration-100"
-          enterFrom="transform opacity-0 scale-95"
-          enterTo="transform opacity-100 scale-100"
-          leave="transition ease-in duration-75"
-          leaveFrom="transform opacity-100 scale-100"
-          leaveTo="transform opacity-0 scale-95"
-        >
-          <Menu.Items className="origin-top-right absolute left-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
-            <Menu.Item>
-              <Link href="/Cargas">
-                <span className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer">
-                  Incluir
-                </span>
-              </Link>
-            </Menu.Item>
-            <Menu.Item>
-              <Link href="/CargasLista">
-                <span className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer">
-                  Cadastro
-                </span>
-              </Link>
-            </Menu.Item>
-          </Menu.Items>
-        </Transition>
-      </Menu>
+      <Link href="/OrganizationsList">
+        <span className="block px-4 py-2 text-sm text-white hover:bg-gray-700 cursor-pointer">
+          Serviços
+        </span>
+      </Link>
     )
   }
 
@@ -148,15 +82,12 @@ export default function Nav() {
 
                     <Link href="/Dashboard">
                       <span className="text-yellow-500 bg-black hover:bg-gray-900 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
-                        ANR Sistemas
+                        {user?.organizationName}
                       </span>
                     </Link>
 
-                    <DropdownMotoristas />
-
                     <DropdownOrganizations />
-
-                    <DropdownCargas />
+                    <DropdownServices user={user} />
 
                   </div>
                 </div>
@@ -269,17 +200,8 @@ export default function Nav() {
                 ANR Sistemas
               </a>
 
-              <p>
-                <DropdownMotoristas />
-              </p>
-
-              <p>
-                <DropdownOrganizations />
-              </p>
-
-              <p>
-                <DropdownCargas />
-              </p>
+              <p><DropdownOrganizations /></p>
+              <p><DropdownServices user={user} /></p>
 
             </div>
 
