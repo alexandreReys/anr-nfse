@@ -53,7 +53,7 @@ export default function Nav() {
 
   const DropdownServices = ({ user }) => {
     return (
-      <Link href="/OrganizationsList">
+      <Link href="/ServicesList">
         <span className="block px-4 py-2 text-sm text-white hover:bg-gray-700 cursor-pointer">
           Serviços
         </span>
