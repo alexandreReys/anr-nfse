@@ -95,7 +95,7 @@ exports.login = async (req, res, next) => {
       const token = utils.getToken({
         email: user.email,
         id: user.id,
-        wixId: user.wixId,
+        organizationId: user.organizationId,
         role: user.role,
       });
 

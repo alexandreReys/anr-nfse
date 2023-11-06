@@ -41,9 +41,9 @@ export const getTokenUserRole = (req: Request) => {
 
 export const getTokenData = (req: Request) => {
   try {
-    let token = req.apiGateway.event.headers.Authorization;
+    let token = req.headers.authorization;
 
-    if (token === undefined || !token) {
+    if ( typeof token !== 'string' || !token ) {
       ErrorsMapped.Custom.message = 'Token is Required';
       return {error: ErrorsMapped.Custom};
     }

@@ -170,3 +170,38 @@ export const remove = async (req, res, next) => {
     return utils.sendError(ErrorsMapped.Custom, next);
   }
 };
+
+export const me = async (req, res, next) => {
+  try {
+    const token = services.getTokenData(req);
+
+    if (token.error) {
+      return utils.sendError(token.error, next);
+    }
+
+    const user = await Users.get({
+      organizationId: token.data.organizationId, 
+      id: token.data.id
+    });
+    
+    if (user === undefined || !user) {
+      return utils.sendError(ErrorsMapped.RecordNotExist, next);
+    }
+
+    if (user.token !== undefined) delete user.token;
+
+    delete user.password;
+    delete user.wixId;
+
+    let response = { user, token: token.data.token };
+
+    if (req.version === 'v2') {
+      response = { user: { info: user }, token: token.data.token }
+    }
+    
+    return res.json(response);    
+  } catch (error) {
+    ErrorsMapped.Custom.message = error;
+    return utils.sendError(ErrorsMapped.Custom, next);
+  }
+};

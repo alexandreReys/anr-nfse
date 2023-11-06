@@ -6,6 +6,7 @@ router.post('/', controller.create);
 router.put('/:organizationId/:id', controller.update);
 router.get('/list/:organizationId', controller.listByOrganization);
 router.get('/:organizationId/:id', controller.get);
+router.get('/me/', controller.me);
 router.delete('/:organizationId/:id', controller.remove);
 
 module.exports = router;

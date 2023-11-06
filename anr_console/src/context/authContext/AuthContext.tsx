@@ -6,6 +6,7 @@ import { setCookie, parseCookies } from 'nookies';
 import { api } from "../../services/api";
 import { User, SignInData, AuthContextType } from '@/context/authContext/types';
 import { ChildrenProps } from '@/types';
+import { showSnackbarError } from '@/components/snackbar';
 
 export const AuthContext = createContext({} as AuthContextType);
 
@@ -18,7 +19,7 @@ export function AuthProvider({ children }: ChildrenProps) {
     const { 'nextauth.token': token } = parseCookies();
 
     if (token) {
-      recoverUserInformation().then(response => {
+      recoverUserInformation(token).then(response => {
         setUser(response.user);
       });
     };
@@ -27,7 +28,10 @@ export function AuthProvider({ children }: ChildrenProps) {
   async function signIn({ email, password }: SignInData) {
     const response = await signInRequest({ email, password });
 
-    if (!response) return;
+    if (!response) {
+      showSnackbarError('Login error. Failed to acquire API credentials !');
+      return;
+    }
 
     const { token, user, organization } = response;
 
@@ -37,12 +41,12 @@ export function AuthProvider({ children }: ChildrenProps) {
 
     api.defaults.headers['Authorization'] = `Bearer ${token}`;
 
-    const x = {
+    const userData = {
       ...user,
       organizationName: organization.name,
     }
 
-    setUser(x);
+    setUser(userData);
 
     Router.push('/Dashboard');
   }
