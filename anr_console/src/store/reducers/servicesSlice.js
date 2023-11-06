@@ -15,8 +15,8 @@ export const getServices = createAsyncThunk('services/getServices', async (servi
   return response.data;
 });
 
-export const listServices = createAsyncThunk('services/listServices', async () => {
-  const response = await api.get(`${apiUrl}/list`);
+export const listServices = createAsyncThunk('services/listServices', async (organizationId) => {
+  const response = await api.get(`${apiUrl}/list/${organizationId}`);
   return response.data;
 });
 
