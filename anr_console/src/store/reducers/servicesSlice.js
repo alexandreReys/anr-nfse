@@ -28,13 +28,14 @@ export const addService = createAsyncThunk('services/addService', async (service
 
 export const updateService = createAsyncThunk('services/updateService', async (serviceData) => {
   const serviceId = serviceData.id;
+  const organizationId = serviceData.organizationId;
   delete serviceData.id;
-  const response = await api.put(`${apiUrl}/${serviceId}`, serviceData);
+  const response = await api.put(`${apiUrl}/${organizationId}/${serviceId}`, serviceData);
   return response.data;
 });
 
-export const deleteService = createAsyncThunk('services/deleteService', async (serviceId) => {
-  const response = await api.delete(`${apiUrl}/${serviceId}`);
+export const deleteService = createAsyncThunk('services/deleteService', async (serviceKey) => {
+  const response = await api.delete(`${apiUrl}/${serviceKey.organizationId}/${serviceKey.serviceId}`);
   return response.data;
 });
 
