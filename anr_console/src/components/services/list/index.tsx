@@ -34,7 +34,7 @@ export default function ServicesListComponent() {
 
   const TableRow = ({ service }) => {
     return (
-      <tr key={service.email} className="border-t">
+      <tr key={service.id} className="border-t">
         <td className="px-4 py-2">
 
           <IconListButton
