@@ -77,11 +77,11 @@ export default function Users() {
             <div className="flex gap-4">
               <div className="flex-1">
                 <label className={labelStyles}>Email</label>
-                <input {...register('user.email')} className={inputStyles} type="text" maxLength={20} />
+                <input {...register('user.email')} className={inputStyles} type="text" maxLength={100} />
               </div>
               <div className="flex-1">
                 <label className={labelStyles}>Foto</label>
-                <input {...register('user.profileImgUrl')} className={inputStyles} type="text" maxLength={30} />
+                <input {...register('user.profileImgUrl')} className={inputStyles} type="text" maxLength={100} />
               </div>
             </div>
 
