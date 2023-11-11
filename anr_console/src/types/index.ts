@@ -4,7 +4,7 @@ export interface ChildrenProps {
   children: ReactNode
 }
 
-export type Organization = {
+export type OrganizationType = {
   id: string,
   name: string,
   stateRegistration: string,
@@ -21,10 +21,18 @@ export type Organization = {
   additionalRemarks: string,
 }
 
-export type User = {
+export type UserType = {
   id: string,
-  email: string;
-  firstName: string;
-  lastName: string;
-  role: string;
+  email: string,
+  firstName: string,
+  lastName: string,
+  role: string,
 };
+
+export type ServiceType = {
+  organizationId: string,
+  id: string,
+  description: string,
+  price: number,
+  additionalRemarks: string,
+}
