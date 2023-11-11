@@ -24,6 +24,7 @@ export default function Services() {
 
   useEffect(() => {
     if (service) {
+      setValue('service.organizationId', service.organizationId);
       setValue('service.id', service.id);
       setValue('service.description', service.description);
       setValue('service.price', service.price);
@@ -81,7 +82,6 @@ export default function Services() {
               </div>
               <div className="flex-1">
                 <label className={labelStyles}>Preço *</label>
-                {/* <input {...register('service.price')} onKeyDown={handleKeyDown} className={inputCodeStyles} type="text" maxLength={40} /> */}
                 <input {...register('service.price')} onKeyDown={handleKeyDown} className={inputCodeStyles} type="number" step="0.01" min="0" placeholder="0,00" />
                 {errors.service?.price?.message && (<p className={errorMsgStyles}>{errors.service?.price?.message}</p>)}
               </div>
@@ -89,13 +89,6 @@ export default function Services() {
 
             <label className={labelStyles}>Observações</label>
             <input {...register('service.additionalRemarks')} onKeyDown={handleKeyDown} className={inputStyles} type="text" />
-
-            {/* <div className="flex gap-4">
-              <div className="flex-grow flex-shrink-0">
-                <label className={labelStyles}>Cidade</label>
-                <input {...register('service.city')} onKeyDown={handleKeyDown} className={inputStyles} type="text" maxLength={40} />
-              </div>
-            </div> */}
 
             <div className='flex justify-between mx-2'>
               <button type="submit" className={buttonStyles}>
@@ -113,20 +106,20 @@ export default function Services() {
   );
 }
 
+// import { NumericFormat } from 'react-number-format';
 
-// import NumberFormat from 'react-number-format';
-
-// // ...
-
-// <NumberFormat
-//   {...register('service.price')}
-//   onKeyDown={handleKeyDown}
-//   className={inputCodeStyles}
-//   thousandSeparator={'.'}
-//   decimalSeparator={','}
-//   fixedDecimalScale={true}
-//   decimalScale={2}
-//   prefix={'R$ '}
-//   placeholder="R$ 0,00"
-//   allowNegative={false}
-// />
+{/* <NumericFormat
+  {...register('service.price')}
+  className={inputCodeStyles}
+  thousandSeparator={'.'}
+  decimalSeparator={','}
+  fixedDecimalScale={true}
+  decimalScale={2}
+  prefix={'R$ '}
+  placeholder="R$ 0,00"
+  onValueChange={(values) => {
+    const { floatValue } = values;
+    setValue('service.price', floatValue || 0); // Aqui você pode ajustar o comportamento conforme a necessidade
+  }}
+  isNumericString
+/> */}
