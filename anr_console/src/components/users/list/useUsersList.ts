@@ -1,36 +1,41 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import * as Users from '@/store/reducers/usersSlice';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { ShowProcessingCallback } from '@/components/snackbar';
 import { useFilteredUsers } from '@/components/users/list/useDebounceUsers';
-import { User } from '@/types';
+import { UserType } from '@/types';
+import { AuthContext } from "@/context/authContext/AuthContext";
 
 export const useUsersList = () => {
+  const { user } = useContext(AuthContext);
   const dispatch = useDispatch();
   const router = useRouter();
   const [error, setError] = useState(null);
   const { users, status } = useSelector((state) => state.users);
   const [searchTerm, setSearchTerm] = useState('');
   const { filteredUsers } = useFilteredUsers(searchTerm, users, 700);
-  
   const [organizationId, setOrganizationId] = useState('');
   const [organizationName, setOrganizationName] = useState('');
 
   useEffect(() => {
-    const organizationId = router.query.organizationId;
-    const organizationName = router.query.organizationName;
+    let organizationId = router.query.organizationId;
+    let organizationName = router.query.organizationName;
 
     if (organizationId === undefined || !organizationId) {
-      router.push('/Dashboard');
+      if (!!user) {
+        setOrganizationId(user.organizationId);
+        setOrganizationName(user.organizationName);
+        dispatch(Users.listUsers(user.organizationId));
+      };
+    } else {
+      setOrganizationId(organizationId);
+      setOrganizationName(organizationName);
+      dispatch(Users.listUsers(organizationId));
     }
-    
-    setOrganizationId(organizationId);
-    setOrganizationName(organizationName);
 
-    dispatch(Users.listUsers(organizationId));
-  }, [dispatch]);
+  }, [dispatch, user]);
 
   const handleAddClick = () => {
     dispatch(Users.setUser({ 
@@ -44,7 +49,7 @@ export const useUsersList = () => {
     router.push('/Users');
   };
 
-  const handleEditClick = (user: User) => {
+  const handleEditClick = (user: UserType) => {
     dispatch(Users.setUser(user));
     router.push('/Users');
   };
@@ -54,7 +59,7 @@ export const useUsersList = () => {
     const returnedData = unwrapResult(actionResult);
 
     ShowProcessingCallback(() => {
-      dispatch(Users.listUsers());
+      dispatch(Users.listUsers(organizationId));
     });
   };
 

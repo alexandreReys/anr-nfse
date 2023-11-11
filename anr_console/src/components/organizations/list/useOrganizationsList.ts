@@ -5,7 +5,7 @@ import * as Organizations from '@/store/reducers/organizationsSlice';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { ShowProcessingCallback } from '@/components/snackbar';
 import { useFilteredOrganizations } from '@/components/organizations/list/useDebounce';
-import { Organization } from '@/types';
+import { OrganizationType } from '@/types';
 import { AuthContext } from "@/context/authContext/AuthContext";
 
 export const useOrganizationsList = () => {
@@ -41,7 +41,7 @@ export const useOrganizationsList = () => {
     router.push('/Organizations');
   };
 
-  const handleEditClick = (organization: Organization) => {
+  const handleEditClick = (organization: OrganizationType) => {
     dispatch(Organizations.setOrganization(organization));
     router.push('/Organizations');
   };

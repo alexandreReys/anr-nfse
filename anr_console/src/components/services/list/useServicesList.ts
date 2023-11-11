@@ -5,7 +5,7 @@ import * as Services from '@/store/reducers/servicesSlice';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { ShowProcessingCallback } from '@/components/snackbar';
 import { useFilteredServices } from '@/components/services/list/useDebounce';
-import { Service } from '@/types';
+import { ServiceType } from '@/types';
 import { AuthContext } from "@/context/authContext/AuthContext";
 
 export const useServicesList = () => {
@@ -37,7 +37,7 @@ export const useServicesList = () => {
     router.push('/Services');
   };
 
-  const handleEditClick = (service: Service) => {
+  const handleEditClick = (service: ServiceType) => {
     dispatch(Services.setService(service));
     router.push('/Services');
   };
