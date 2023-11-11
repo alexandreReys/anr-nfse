@@ -15,14 +15,20 @@ export const useServicesList = () => {
   const [error, setError] = useState(null);
   const { services, status } = useSelector((state) => state.services);
   const [searchTerm, setSearchTerm] = useState('');
+  const [loggedUser, setLoggedUser] = useState({});
   const { filteredServices } = useFilteredServices(searchTerm, services, 700);
 
   useEffect(() => {
-    dispatch(Services.listServices(user.organizationId));
-  }, [dispatch]);
+    if (!!user) {
+      setLoggedUser(user);
+      dispatch(Services.listServices(user?.organizationId));
+    }
+    
+  }, [dispatch, user]);
 
   const handleAddClick = () => {
     dispatch(Services.setService({
+      organizationId: user.organizationId,
       id: '',
       description: '',
       price: 0,
@@ -37,11 +43,14 @@ export const useServicesList = () => {
   };
   
   const handleDeleteClick = async (serviceId: string) => {
-    const actionResult = await dispatch(Services.deleteService(serviceId));
+    const actionResult = await dispatch(Services.deleteService({
+      organizationId: user.organizationId, 
+      serviceId
+    }));
     const returnedData = unwrapResult(actionResult);
 
     ShowProcessingCallback(() => {
-      dispatch(Services.listServices());
+      dispatch(Services.listServices(loggedUser.organizationId));
     });
   };
 
