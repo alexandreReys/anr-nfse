@@ -1,11 +1,12 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, useContext } from "react";
 import { useRouter } from 'next/router';
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { schemaForm } from "./schema";
 import { FormProps } from "./types";
-
 import { useDispatch } from 'react-redux';
+import { AuthContext } from "@/context/authContext/AuthContext";
+
 import * as Services from '@/store/reducers/servicesSlice';
 import { unwrapResult } from "@reduxjs/toolkit";
 import { ShowProcessingCallback } from "@/components/snackbar";
@@ -15,6 +16,7 @@ import axios from 'axios';
 const apiUrl = 'https://viacep.com.br/ws';
 
 export const useServices = () => {
+  const { user } = useContext(AuthContext);
   const dispatch = useDispatch();
   const router = useRouter();
   const [isMounted, setIsMounted] = useState(false);
@@ -31,52 +33,19 @@ export const useServices = () => {
     resolver: zodResolver(schemaForm),
     defaultValues: {
       service: {
-        name: '',
-        stateRegistration: '',
-        nationalRegistration: '',
-        zipCode: '',
-        street: '',
-        number: '',
-        district: '',
-        complement: '',
-        city: '',
-        state: '',
-        phoneNumber: '',
-        email: '',
+        organizationId: user.organizationId,
+        id: '',
+        description: '',
+        price: 0,
         additionalRemarks: '',
       }
     }
   });
 
-  const zipCode = watch('service.zipCode');
-
-  const handleSetData = useCallback((data: AddressProps) => {
-    setValue('service.city', data.localidade);
-    setValue('service.street', data.logradouro);
-    setValue('service.state', data.uf);
-    setValue('service.district', data.bairro);
-    setValue('service.complement', '');
-  }, [setValue])
-  
-  const handleFetchAddress = useCallback(async (zipCode: string) => {
-    const { data } = await axios.get(`${apiUrl}/${zipCode}/json/`);
-    handleSetData(data);
-  }, [handleSetData])
-  
-  useEffect(() => {
-    setValue('service.zipCode', zipCodeMask(zipCode));
-    if (zipCode.length !== 9) return;
-
-    if (!isMounted) {
-      setIsMounted(true);
-      return;
-    }
-
-    handleFetchAddress(zipCode);
-  }, [handleFetchAddress, zipCode]);
-
   const handleFormSubmit = async (data: FormProps) => {
     let actionResult = null;
+
+    console.log('===> handleFormSubmit.data:', data);
 
     if (!data.service.id) {
       actionResult = await dispatch(Services.addService(data.service));
