@@ -51,6 +51,16 @@ export default function Nav() {
     )
   }
 
+  const DropdownUsers = () => {
+    return (
+      <Link href="/UsersList">
+        <span className="block px-4 py-2 text-sm text-white hover:bg-gray-700 cursor-pointer">
+          Usuários
+        </span>
+      </Link>
+    )
+  }
+
   const DropdownServices = ({ user }) => {
     return (
       <Link href="/ServicesList">
@@ -87,6 +97,7 @@ export default function Nav() {
                     </Link>
 
                     <DropdownOrganizations />
+                    <DropdownUsers />
                     <DropdownServices user={user} />
 
                   </div>
@@ -201,6 +212,7 @@ export default function Nav() {
               </a>
 
               <p><DropdownOrganizations /></p>
+              <p><DropdownUsers /></p>
               <p><DropdownServices user={user} /></p>
 
             </div>
