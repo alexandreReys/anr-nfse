@@ -17,7 +17,7 @@ export const useFilteredServices = (searchTerm: string, services: any[], delay: 
   useEffect(() => {
     if (debouncedSearchTerm) {
       const lowercasedDebouncedSearchTerm = debouncedSearchTerm.toLowerCase();
-      const filtered = services.filter(service => service.name.toLowerCase().includes(lowercasedDebouncedSearchTerm));
+      const filtered = services.filter(service => service.description.toLowerCase().includes(lowercasedDebouncedSearchTerm));
       setFilteredServices(filtered);
     } else {
       setFilteredServices(services);
