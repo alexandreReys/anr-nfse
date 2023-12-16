@@ -42,14 +42,14 @@ export async function recoverUserInformation(token: string) {
   const config = { headers: { 'Authorization': token } };
   const userResponse = await api.get(`/api/v1/users/me`, config);
   if (!!userResponse) {
-    console.log('recoverUserInformation.userResponse.data', userResponse.data);
+    // console.log('recoverUserInformation.userResponse.data', userResponse.data);
   };
   
   const organizationId = userResponse.data.user.organizationId;
   
   const organizationData = await getOrganizationData(token, organizationId);
   if (!!organizationData) {
-    console.log('recoverUserInformation.organizationData', organizationData);
+    // console.log('recoverUserInformation.organizationData', organizationData);
   };
   
   const userData = {

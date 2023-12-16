@@ -96,8 +96,8 @@ export default function Nav() {
                       </span>
                     </Link>
 
-                    <DropdownOrganizations />
-                    <DropdownUsers />
+                    {user?.role === 'SUPER' && (<DropdownOrganizations />)}
+                    {user?.role === 'ADMIN' && (<DropdownUsers />)}
                     <DropdownServices user={user} />
 
                   </div>

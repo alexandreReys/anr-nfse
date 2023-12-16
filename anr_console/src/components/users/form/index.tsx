@@ -85,6 +85,11 @@ export default function Users() {
               </div>
             </div>
 
+            <div className="max-w-md">
+              <label className={labelStyles}>Senha</label>
+              <input {...register('user.password')} className={inputStyles} type="text" maxLength={100} />
+            </div>
+
             <div className='flex justify-between mx-2'>
               <button type="submit" className={buttonStyles}>
                 Salvar

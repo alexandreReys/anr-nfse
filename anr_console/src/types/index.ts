@@ -27,6 +27,7 @@ export type UserType = {
   firstName: string,
   lastName: string,
   role: string,
+  password: string,
 };
 
 export type ServiceType = {

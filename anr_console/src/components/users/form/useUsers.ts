@@ -31,6 +31,7 @@ export const useUsers = () => {
         password: '',
         role: '',
         profileImgUrl: '',
+        password: '',
       }
     }
   });
