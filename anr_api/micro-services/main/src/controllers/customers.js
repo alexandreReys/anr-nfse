@@ -2,7 +2,7 @@ import bcrypt from 'bcryptjs';
 import * as utils from '../utils';
 import * as services  from '../services'
 import { ErrorsMapped } from '../config/errors-mapped';
-import Services from '../models/services';
+import Customers from '../models/customers';
 
 ////////////////////////////////////////////////////////////////////////
 //  AUXILIARY FUNCTIONS
@@ -14,7 +14,7 @@ async function canCreate(req, origin) {
     //  CHECK FIELDS
     ////////////////////////////////////////////////////////////////////////
 
-    const error = utils.checkRequiredFields(req.body, ['organizationId', 'description']);
+    const error = utils.checkRequiredFields(req.body, ['organizationId', 'name']);
     if (error) return error;
 
     ////////////////////////////////////////////////////////////////////////
@@ -25,13 +25,13 @@ async function canCreate(req, origin) {
     //  VALIDATIONS
     ////////////////////////////////////////////////////////////////////////
 
-    const services = await Services
-    .query('description').eq(req.body.description)
+    const customers = await Customers
+    .query('name').eq(req.body.name)
     .where('organizationId').eq(req.body.organizationId)
     .exec();
     
-    if (services.length > 0) {
-      ErrorsMapped.Custom.message = 'Service already registered';
+    if (customers.length > 0) {
+      ErrorsMapped.Custom.message = 'Customer already registered';
       return ErrorsMapped.Custom;
     }
 
@@ -45,12 +45,12 @@ async function canCreate(req, origin) {
 
 async function canUpdate(req) {
   try {
-    const service = await Services.get({ 
+    const customer = await Customers.get({ 
       organizationId: req.params.organizationId, 
       id: req.params.id 
     });
 
-    if (service === undefined || !service) {
+    if (customer === undefined || !customer) {
       return ErrorsMapped.RecordNotExist;
     }
 
@@ -73,12 +73,12 @@ async function canUpdate(req) {
 
 async function canDelete(req) {
   try {
-    const service = await Services.get({ 
+    const customer = await Customers.get({ 
       organizationId: req.params.organizationId, 
       id: req.params.id 
     });
     
-    if (service === undefined || !service) {
+    if (customer === undefined || !customer) {
       return ErrorsMapped.RecordNotExist;
     }
     return null;
@@ -101,9 +101,9 @@ export const create = async (req, res, next) => {
     
     delete req.body.id
     
-    const service = await Services.create(req.body);
+    const customer = await Customers.create(req.body);
 
-    return res.json({ service });  
+    return res.json({ customer });  
   } catch (error) {
     ErrorsMapped.Custom.message = error;
     return utils.sendError(ErrorsMapped.Custom, next);
@@ -112,18 +112,16 @@ export const create = async (req, res, next) => {
 
 export const get = async (req, res, next) => {
   try {
-    const service = await Services.get({ 
+    const customer = await Customers.get({ 
       organizationId: req.params.organizationId, 
       id: req.params.id
     });
 
-    if (service === undefined || !service) {
+    if (customer === undefined || !customer) {
       return utils.sendError(ErrorsMapped.RecordNotExist, next);
     }
 
-    const response = { service: service };
-    
-    return res.json(response);  
+    return res.json({ customer });  
   } catch (error) {
     ErrorsMapped.Custom.message = error;
     return utils.sendError(ErrorsMapped.Custom, next);
@@ -140,7 +138,7 @@ export const update = async (req, res, next) => {
     delete req.body.organizationId
     delete req.body.id
 
-    const service = await Services.update(
+    const customer = await Customers.update(
       {
         organizationId: req.params.organizationId,
         id: req.params.id
@@ -148,22 +146,20 @@ export const update = async (req, res, next) => {
       req.body
     );
     
-    return res.json({ service });  
+    return res.json({ customer });  
   } catch (error) {
     ErrorsMapped.Custom.message = error;
     return utils.sendError(ErrorsMapped.Custom, next);
   }
 };
 
-export const listByOrganization = async (req, res, next) => {
+export const listByCustomer = async (req, res, next) => {
   try {
-    const services = await Services
+    const customers = await Customers
     .query('organizationId').eq(req.params.organizationId)
     .all().exec();
 
-    let response = { services };
-    
-    return res.json(response);  
+    return res.json({ customers });  
   } catch (error) {
     ErrorsMapped.Custom.message = error;
     return utils.sendError(ErrorsMapped.Custom, next);
@@ -177,7 +173,7 @@ export const remove = async (req, res, next) => {
       return utils.sendError(error, next);
     }
 
-    const service = await Services.delete({ 
+    const customer = await Customers.delete({ 
       organizationId: req.params.organizationId, 
       id: req.params.id 
     });
@@ -191,7 +187,7 @@ export const remove = async (req, res, next) => {
 
 export const removeTests = async (req, res, next) => {
   try {
-    await services.removeServiceTests();
+    await services.removeCustomerTests();
 
     return res.json({ message: 'success' });
   } catch (error) {

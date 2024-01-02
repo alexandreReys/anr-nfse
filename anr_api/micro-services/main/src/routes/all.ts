@@ -6,6 +6,7 @@ import authRouter from './auth';
 import usersRouter from './users';
 import organizationsRouter from './organizations';
 import servicesRouter from './services';
+import customersRouter from './customers';
 import nfseRouter from './nfse';
 
 const router = Router();
@@ -19,6 +20,7 @@ router.use('/auth/:version', authRouter);
 router.use('/api/:version/users', usersRouter);
 router.use('/api/:version/organizations', organizationsRouter);
 router.use('/api/:version/services', servicesRouter);
+router.use('/api/:version/customers', customersRouter);
 router.use('/api/:version/nfse', nfseRouter);
 router.use('/api/', require('./root'));
 router.use('/', require('./root'));

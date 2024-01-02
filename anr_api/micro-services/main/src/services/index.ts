@@ -6,7 +6,7 @@ import * as utils from '../utils';
 import Users from '../models/users';
 import Organizations from '../models/organizations';
 import Services from '../models/services';
-
+import Customers from '../models/customers';
 
 export const checkReqVersion = (req: Request) => {
   switch (true) {
@@ -97,5 +97,15 @@ export const removeServiceTests = async () => {
     services.forEach((service) => idsToDelete.push(service.id));
     console.log('Removing Services Tests:', idsToDelete);
     await Services.batchDelete(idsToDelete);
+  }
+}
+
+export const removeCustomerTests = async () => {
+  const customers = await Customers.scan('email').eq('test@test.com').exec();
+  if (customers.length > 0) {
+    let idsToDelete:any[] = [];
+    customers.forEach((customer) => idsToDelete.push(customer.id));
+    console.log('Removing Customers Tests:', idsToDelete);
+    await Customers.batchDelete(idsToDelete);
   }
 }
