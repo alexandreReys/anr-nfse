@@ -5,8 +5,8 @@ useDotenv: true
 provider:
   name: aws
   runtime: nodejs18.x
-  stage: ${opt:stage}
-  profile: ${opt:aws-profile}
+  profile: ${env:AWS_PROFILE, 'default'}
+  region: ${env:AWS_REGION}
   deploymentBucket:
     name: ${env:SERVERLESS_BUCKET_NAME}
   apiGateway:
