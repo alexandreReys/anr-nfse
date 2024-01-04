@@ -5,7 +5,7 @@ const apiUrl = process.env.API_URL;
 const shared = require('./shared');
 let token = process.env.TOKEN;
 
-process.env.AWS_PROFILE = 'anr'; 
+// process.env.AWS_PROFILE = 'anr'; 
 const AWS = require('aws-sdk');
 const s3 = new AWS.S3();
 
