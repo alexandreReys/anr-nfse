@@ -7,8 +7,19 @@ class ICustomer extends Item {
   organizationId: String;
   id: String;
   name: String;
+  stateRegistration: String;
+  nationalRegistration: String;
+  zipCode: String;
+  street: String;
+  number: String;
+  district: String;
+  complement: String;
+  city: String;
+  state: String;
+  phoneNumber: String;
+  email: String;
   additionalRemarks: String;
-}
+};
 
 const CustomersSchema = new dynamoose.Schema(
   {
@@ -31,6 +42,50 @@ const CustomersSchema = new dynamoose.Schema(
       index: {
         name: `${process.env.PROJECT_ENVIRONMENT}-${tableName}-name-gsi`,
       },
+    },
+    stateRegistration: {
+      type: String,
+      default: '',
+    },
+    nationalRegistration: {
+      type: String,
+      default: '',
+    },
+    zipCode: {
+      type: String,
+      default: '',
+    },
+    street: {
+      type: String,
+      default: '',
+    },
+    number: {
+      type: String,
+      default: '',
+    },
+    district: {
+      type: String,
+      default: '',
+    },
+    complement: {
+      type: String,
+      default: '',
+    },
+    city: {
+      type: String,
+      default: '',
+    },
+    state: {
+      type: String,
+      default: '',
+    },
+    phoneNumber: {
+      type: String,
+      default: '',
+    },
+    email: {
+      type: String,
+      default: '',
     },
     additionalRemarks: {
       type: String,
