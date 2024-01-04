@@ -45,8 +45,6 @@ export const useServices = () => {
   const handleFormSubmit = async (data: FormProps) => {
     let actionResult = null;
 
-    console.log('===> handleFormSubmit.data:', data);
-
     if (!data.service.id) {
       actionResult = await dispatch(Services.addService(data.service));
     } else {
