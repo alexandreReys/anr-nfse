@@ -81,6 +81,16 @@ export default function Nav() {
     )
   }
 
+  const DropdownServiceOrders = ({ user }) => {
+    return (
+      <Link href="/ServiceOrdersList">
+        <span className="block px-4 py-2 text-sm text-white hover:bg-gray-700 cursor-pointer">
+          O.S.
+        </span>
+      </Link>
+    )
+  }
+
   return (
     <Disclosure as="nav" className="bg-gray-800">
       {({ open }) => (
@@ -106,10 +116,11 @@ export default function Nav() {
                       </span>
                     </Link>
 
-                    {user?.role === 'SUPER' && (<DropdownOrganizations />)}
-                    {user?.role === 'ADMIN' && (<DropdownUsers />)}
+                    {(user?.role === 'SUPER') && (<DropdownOrganizations />)}
+                    {(user?.role === 'ADMIN') && (<DropdownUsers />)}
                     <DropdownServices user={user} />
                     <DropdownCustomers user={user} />
+                    <DropdownServiceOrders user={user} />
 
                   </div>
                 </div>
@@ -229,6 +240,7 @@ export default function Nav() {
               {user?.role === 'ADMIN' && (<p><DropdownUsers /></p>)}
               <p><DropdownServices user={user} /></p>
               <p><DropdownCustomers user={user} /></p>
+              <p><DropdownServiceOrders user={user} /></p>
 
             </div>
 
