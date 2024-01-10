@@ -14,7 +14,7 @@
     "prod:remove": "serverless remove --aws-profile anr --stage prod",
     "dev:offline": "serverless offline start --stage dev --noPrependStageInUrl --noTimeout",
     "prod:offline": "del .build /Q /F && set AWS_PROFILE=anr&& serverless offline start --aws-profile anr --region us-east-2 --noPrependStageInUrl --noTimeout --stage prod",
-    "test:v1:local": "set ENV=local && jest ./__tests__/v1/ -i --verbose --config=__tests__/v1/config/jest.config.js",
+    "test:v1:local": "set ENV=local && set AWS_PROFILE=anr&& jest ./__tests__/v1/ -i --verbose --config=__tests__/v1/config/jest.config.js",
     "test:v1:dev": "set ENV=dev     && jest ./__tests__/v1/ -i --verbose --config=__tests__/v1/config/jest.config.js",
     "test:v1:prod": "set ENV=prod   && jest ./__tests__/v1/ -i --verbose --config=__tests__/v1/config/jest.config.js"
   },

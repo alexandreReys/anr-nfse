@@ -28,11 +28,12 @@ function getAuthorizerInfo(req) {
     : req.requestContext.authorizer.claims;
 };
 
-export const getTokenUserRole = (req: Request) => {
+export const getUserTokenInfo = (req: Request) => {
   const tokenInfo = getAuthorizerInfo(req);
   const roles = tokenInfo.role ? tokenInfo.role.split('|') : [];
   return({
     email: tokenInfo.email,
+    organizationId: tokenInfo.organizationId,
     userId: tokenInfo.id,
     isAdmin: roles.includes('ADMIN'),
     roles
