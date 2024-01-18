@@ -3,6 +3,8 @@ import * as utils from '../utils';
 import * as services  from '../services'
 import { ErrorsMapped } from '../config/errors-mapped';
 import ServiceOrders from '../models/serviceOrders';
+import Customers from '../models/customers';
+import Services from '../models/services';
 
 ////////////////////////////////////////////////////////////////////////
 //  AUXILIARY FUNCTIONS
@@ -150,13 +152,30 @@ export const update = async (req, res, next) => {
   }
 };
 
-export const listByCustomer = async (req, res, next) => {
+
+export const list = async (req, res, next) => {
   try {
     const serviceOrders = await ServiceOrders
     .query('organizationId').eq(req.params.organizationId)
     .all().exec();
 
-    return res.json({ serviceOrders });  
+    let response = [];
+
+    for (const serviceOrder of serviceOrders) {
+      const customer = await Customers.get({ 
+        organizationId: req.params.organizationId, 
+        id: serviceOrder.customerId, 
+      });
+  
+      const service = await Services.get({ 
+        organizationId: req.params.organizationId, 
+        id: serviceOrder.serviceId,
+      });
+
+      response.push({ ...serviceOrder, customerName: customer.name, serviceDescription: service.description })
+    }
+
+    return res.json({ serviceOrders: response });  
   } catch (error) {
     ErrorsMapped.Custom.message = error;
     return utils.sendError(ErrorsMapped.Custom, next);

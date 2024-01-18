@@ -25,8 +25,8 @@ export default function ServiceOrdersListComponent() {
       <thead>
         <tr className="bg-gray-200 text-gray-800">
           <th className="px-4 py-2 text-left">Ações</th>
-          <th className="px-4 py-2 text-left">ID</th>
-          <th className="px-4 py-2 text-left">Description</th>
+          <th className="px-4 py-2 text-left">Cliente</th>
+          <th className="px-4 py-2 text-left">Serviço</th>
           <th className="px-4 py-2 text-left">Total</th>
         </tr>
       </thead>
@@ -54,7 +54,7 @@ export default function ServiceOrdersListComponent() {
 
           <Tooltip id="tooltip" />
         </td>
-        <td className="text-sm px-4 py-2">{serviceOrder.id}</td>
+        <td className="text-sm px-4 py-2">{serviceOrder.customerName}</td>
         <td className="text-sm px-4 py-2">{serviceOrder.description}</td>
         <td className="text-sm px-4 py-2">{serviceOrder.total}</td>
       </tr>

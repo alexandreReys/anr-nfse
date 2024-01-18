@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { schemaForm } from "./schema";
 import { FormProps } from "./types";
-
+import * as utils from '@/utils'
 import { useDispatch } from 'react-redux';
 import * as Organizations from '@/store/reducers/organizationsSlice';
 import { unwrapResult } from "@reduxjs/toolkit";
@@ -24,6 +24,7 @@ export const useOrganizations = () => {
   const inputCodeStyles = 'flex w-36 border border-gray-500 px-2 py-1 rounded';
   const buttonStyles = 'text-white bg-blue-700 hover:bg-blue-600  hover:text-yellow-200 py-3 px-8 rounded font-bold mt-8';
   const errorMsgStyles = 'text-red-900 font-bold text-sm mt-1';
+  const statesList = utils.statesList;
 
   const { handleSubmit, register, watch, setValue, formState: { errors } } = useForm<FormProps>({
     criteriaMode: 'all',
@@ -64,6 +65,8 @@ export const useOrganizations = () => {
   }, [handleSetData])
   
   useEffect(() => {
+    if (!zipCode) return;
+
     setValue('organization.zipCode', zipCodeMask(zipCode));
     if (zipCode.length !== 9) return;
 
@@ -106,5 +109,6 @@ export const useOrganizations = () => {
     labelStyles,
     buttonStyles,
     errorMsgStyles,
+    statesList,
   }
 };
